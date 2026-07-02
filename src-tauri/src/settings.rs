@@ -21,6 +21,10 @@ pub struct AppSettings {
     pub window_height: u32,
     #[serde(default = "default_archive_days")]
     pub archive_days: u32,
+    #[serde(default = "default_clipboard_enabled")]
+    pub clipboard_enabled: bool,
+    #[serde(default = "default_clipboard_max")]
+    pub clipboard_max_entries: u32,
 }
 
 fn default_theme() -> String { "system".into() }
@@ -31,6 +35,8 @@ fn default_shortcut() -> String { "Alt+Space".into() }
 fn default_width() -> u32 { 360 }
 fn default_height() -> u32 { 720 }
 fn default_archive_days() -> u32 { 30 }
+fn default_clipboard_enabled() -> bool { true }
+fn default_clipboard_max() -> u32 { 500 }
 
 impl Default for AppSettings {
     fn default() -> Self {
@@ -43,6 +49,8 @@ impl Default for AppSettings {
             window_width: default_width(),
             window_height: default_height(),
             archive_days: default_archive_days(),
+            clipboard_enabled: default_clipboard_enabled(),
+            clipboard_max_entries: default_clipboard_max(),
         }
     }
 }

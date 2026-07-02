@@ -14,6 +14,7 @@ mod window;
 
 use settings::SettingsStore;
 use db::notes::NotesStore;
+use db::clipboard::ClipboardStore;
 use db::tags::TagsStore;
 use commands::{settings_cmd, notes_cmd, tags_cmd};
 
@@ -49,6 +50,7 @@ pub fn run() {
         .manage(settings_store)
         .manage(NotesStore::new())
         .manage(TagsStore::new())
+        .manage(ClipboardStore::new(500))
         .setup(move |app| {
             let show_item = MenuItemBuilder::with_id("show", "Show").build(app)?;
             let settings_item = MenuItemBuilder::with_id("settings", "Settings").build(app)?;
@@ -125,6 +127,11 @@ pub fn run() {
             notes_cmd::soft_delete_note,
             notes_cmd::restore_note,
             notes_cmd::purge_trash,
+            clipboard_cmd::clipboard_poll,
+            clipboard_cmd::get_clipboard_entries,
+            clipboard_cmd::delete_clipboard_entry,
+            clipboard_cmd::clear_clipboard_history,
+            clipboard_cmd::star_clipboard_entry,
             notes_cmd::delete_note,
             tags_cmd::get_tags,
             tags_cmd::save_tag,
