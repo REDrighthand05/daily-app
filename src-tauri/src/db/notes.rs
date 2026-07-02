@@ -1,4 +1,4 @@
-﻿use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
 use std::sync::Mutex;
@@ -17,6 +17,8 @@ pub struct Note {
     pub category: Option<String>,
     #[serde(default)]
     pub archived: bool,
+    #[serde(default)]
+    pub deleted_at: Option<u64>,
 }
 
 pub struct NotesStore {

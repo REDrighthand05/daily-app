@@ -6,9 +6,11 @@ export interface AppSettings {
   shortcut_toggle: string;
   window_width: number;
   window_height: number;
+  archive_days: number;
 }
 
 export interface Note {
+  deleted_at: number | null;
   id: string;
   content: string;
   created_at: number;

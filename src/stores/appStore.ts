@@ -10,6 +10,8 @@ interface AppState {
   searchQuery: string;
   selectedTagId: string | null;
   editorMode: EditorMode;
+  showArchived: boolean;
+  showDeleted: boolean;
   loaded: boolean;
 
   loadAll: () => Promise<void>;
@@ -25,6 +27,14 @@ interface AppState {
   deleteTag: (id: string) => Promise<void>;
   setSelectedTagId: (id: string | null) => void;
   setEditorMode: (mode: EditorMode) => void;
+
+  archiveNote: (id: string) => Promise<void>;
+  restoreArchive: (id: string) => Promise<void>;
+  softDeleteNote: (id: string) => Promise<void>;
+  restoreNote: (id: string) => Promise<void>;
+  purgeTrash: () => Promise<void>;
+  setShowArchived: (v: boolean) => void;
+  setShowDeleted: (v: boolean) => void;
 }
 
 const defaults: AppSettings = {
@@ -35,6 +45,7 @@ const defaults: AppSettings = {
   shortcut_toggle: "Alt+Space",
   window_width: 360,
   window_height: 720,
+  archive_days: 30,
 };
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -45,6 +56,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   searchQuery: "",
   selectedTagId: null,
   editorMode: "edit",
+  showArchived: false,
+  showDeleted: false,
   loaded: false,
 
   loadAll: async () => {
@@ -95,6 +108,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   setSearchQuery: (q) => set({ searchQuery: q }),
   setSelectedTagId: (id) => set({ selectedTagId: id }),
   setEditorMode: (mode) => set({ editorMode: mode }),
+  setShowArchived: (v) => set({ showArchived: v, showDeleted: false }),
+  setShowDeleted: (v) => set({ showDeleted: v, showArchived: false }),
 
   loadTags: async () => {
     try { set({ tags: await ipc.getTags() }); } catch {}
@@ -114,5 +129,35 @@ export const useAppStore = create<AppState>((set, get) => ({
   deleteTag: async (id) => {
     await ipc.deleteTag(id);
     set({ tags: get().tags.filter((t) => t.id !== id) });
+  },
+
+  archiveNote: async (id) => {
+    await ipc.archiveNote(id);
+    const notes = get().notes.map((n) => n.id === id ? { ...n, archived: true } : n);
+    set({ notes });
+  },
+
+  restoreArchive: async (id) => {
+    await ipc.restoreArchive(id);
+    const notes = get().notes.map((n) => n.id === id ? { ...n, archived: false } : n);
+    set({ notes });
+  },
+
+  softDeleteNote: async (id) => {
+    await ipc.softDeleteNote(id);
+    const now = Date.now();
+    const notes = get().notes.map((n) => n.id === id ? { ...n, deleted_at: now } : n);
+    set({ notes });
+  },
+
+  restoreNote: async (id) => {
+    await ipc.restoreNote(id);
+    const notes = get().notes.map((n) => n.id === id ? { ...n, deleted_at: null, archived: false } : n);
+    set({ notes });
+  },
+
+  purgeTrash: async () => {
+    await ipc.purgeTrash();
+    set({ notes: get().notes.filter((n) => n.deleted_at === null) });
   },
 }));

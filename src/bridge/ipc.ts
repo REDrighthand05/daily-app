@@ -11,6 +11,13 @@ export const saveNote = (note: Note): Promise<void> =>
 export const deleteNote = (id: string): Promise<void> =>
   invoke("delete_note", { id });
 
+// Archive / Trash
+export const archiveNote = (id: string): Promise<void> => invoke("archive_note", { id });
+export const restoreArchive = (id: string): Promise<void> => invoke("restore_archive", { id });
+export const softDeleteNote = (id: string): Promise<void> => invoke("soft_delete_note", { id });
+export const restoreNote = (id: string): Promise<void> => invoke("restore_note", { id });
+export const purgeTrash = (): Promise<void> => invoke("purge_trash");
+
 // Export
 export const writeFile = (path: string, content: string): Promise<void> =>
   invoke("write_file", { path, content });

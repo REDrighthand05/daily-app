@@ -1,4 +1,4 @@
-﻿use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
 use std::sync::Mutex;
@@ -19,6 +19,8 @@ pub struct AppSettings {
     pub window_width: u32,
     #[serde(default = "default_height")]
     pub window_height: u32,
+    #[serde(default = "default_archive_days")]
+    pub archive_days: u32,
 }
 
 fn default_theme() -> String { "system".into() }
@@ -28,6 +30,7 @@ fn default_autostart() -> bool { false }
 fn default_shortcut() -> String { "Alt+Space".into() }
 fn default_width() -> u32 { 360 }
 fn default_height() -> u32 { 720 }
+fn default_archive_days() -> u32 { 30 }
 
 impl Default for AppSettings {
     fn default() -> Self {
@@ -39,6 +42,7 @@ impl Default for AppSettings {
             shortcut_toggle: default_shortcut(),
             window_width: default_width(),
             window_height: default_height(),
+            archive_days: default_archive_days(),
         }
     }
 }
