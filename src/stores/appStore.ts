@@ -1,17 +1,19 @@
 import { create } from "zustand";
-import type { AppSettings, Note, Tab, Tag, EditorMode } from "../types";
+import type { AppSettings, Note, Tab, Tag, EditorMode, ClipboardEntry } from "../types";
 import * as ipc from "../bridge/ipc";
 
 interface AppState {
   settings: AppSettings;
   notes: Note[];
   tags: Tag[];
+  clipboardEntries: ClipboardEntry[];
   activeTab: Tab;
   searchQuery: string;
   selectedTagId: string | null;
   editorMode: EditorMode;
   showArchived: boolean;
   showDeleted: boolean;
+  clipboardSearchQuery: string;
   loaded: boolean;
 
   loadAll: () => Promise<void>;
@@ -35,6 +37,13 @@ interface AppState {
   purgeTrash: () => Promise<void>;
   setShowArchived: (v: boolean) => void;
   setShowDeleted: (v: boolean) => void;
+
+  loadClipboardEntries: () => Promise<void>;
+  addClipboardEntry: (entry: ClipboardEntry) => void;
+  deleteClipboardEntry: (id: string) => Promise<void>;
+  clearClipboardHistory: () => Promise<void>;
+  starClipboardEntry: (id: string, starred: boolean) => Promise<void>;
+  setClipboardSearchQuery: (q: string) => void;
 }
 
 const defaults: AppSettings = {
@@ -52,22 +61,25 @@ export const useAppStore = create<AppState>((set, get) => ({
   settings: { ...defaults },
   notes: [],
   tags: [],
+  clipboardEntries: [],
   activeTab: "notes",
   searchQuery: "",
   selectedTagId: null,
   editorMode: "edit",
   showArchived: false,
   showDeleted: false,
+  clipboardSearchQuery: "",
   loaded: false,
 
   loadAll: async () => {
     try {
-      const [settings, notes, tags] = await Promise.all([
+      const [settings, notes, tags, clipboardEntries] = await Promise.all([
         ipc.getSettings(),
         ipc.getNotes(),
         ipc.getTags(),
+        ipc.getClipboardEntries(),
       ]);
-      set({ settings, notes, tags, loaded: true });
+      set({ settings, notes, tags, clipboardEntries, loaded: true });
     } catch {
       set({ loaded: true });
     }
@@ -133,31 +145,56 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   archiveNote: async (id) => {
     await ipc.archiveNote(id);
-    const notes = get().notes.map((n) => n.id === id ? { ...n, archived: true } : n);
-    set({ notes });
+    set({ notes: get().notes.map((n) => n.id === id ? { ...n, archived: true } : n) });
   },
 
   restoreArchive: async (id) => {
     await ipc.restoreArchive(id);
-    const notes = get().notes.map((n) => n.id === id ? { ...n, archived: false } : n);
-    set({ notes });
+    set({ notes: get().notes.map((n) => n.id === id ? { ...n, archived: false } : n) });
   },
 
   softDeleteNote: async (id) => {
     await ipc.softDeleteNote(id);
     const now = Date.now();
-    const notes = get().notes.map((n) => n.id === id ? { ...n, deleted_at: now } : n);
-    set({ notes });
+    set({ notes: get().notes.map((n) => n.id === id ? { ...n, deleted_at: now } : n) });
   },
 
   restoreNote: async (id) => {
     await ipc.restoreNote(id);
-    const notes = get().notes.map((n) => n.id === id ? { ...n, deleted_at: null, archived: false } : n);
-    set({ notes });
+    set({ notes: get().notes.map((n) => n.id === id ? { ...n, deleted_at: null, archived: false } : n) });
   },
 
   purgeTrash: async () => {
     await ipc.purgeTrash();
     set({ notes: get().notes.filter((n) => n.deleted_at === null) });
   },
+
+  loadClipboardEntries: async () => {
+    try { set({ clipboardEntries: await ipc.getClipboardEntries() }); } catch {}
+  },
+
+  addClipboardEntry: (entry) => {
+    set({ clipboardEntries: [entry, ...get().clipboardEntries] });
+  },
+
+  deleteClipboardEntry: async (id) => {
+    await ipc.deleteClipboardEntry(id);
+    set({ clipboardEntries: get().clipboardEntries.filter((e) => e.id !== id) });
+  },
+
+  clearClipboardHistory: async () => {
+    await ipc.clearClipboardHistory();
+    set({ clipboardEntries: [] });
+  },
+
+  starClipboardEntry: async (id, starred) => {
+    await ipc.starClipboardEntry(id, starred);
+    set({
+      clipboardEntries: get().clipboardEntries.map((e) =>
+        e.id === id ? { ...e, starred } : e
+      ),
+    });
+  },
+
+  setClipboardSearchQuery: (q) => set({ clipboardSearchQuery: q }),
 }));

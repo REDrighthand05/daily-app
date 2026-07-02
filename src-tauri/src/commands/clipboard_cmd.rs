@@ -83,3 +83,8 @@ pub fn star_clipboard_entry(store: State<ClipboardStore>, id: String, starred: b
     drop(entries);
     store.save()
 }
+#[tauri::command]
+pub fn write_clipboard(content: String) -> Result<(), String> {
+    let mut clipboard = arboard::Clipboard::new().map_err(|e| format!("clipboard error: {}", e))?;
+    clipboard.set_text(content).map_err(|e| format!("write error: {}", e))
+}

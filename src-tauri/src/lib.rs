@@ -132,6 +132,7 @@ pub fn run() {
             clipboard_cmd::delete_clipboard_entry,
             clipboard_cmd::clear_clipboard_history,
             clipboard_cmd::star_clipboard_entry,
+            clipboard_cmd::write_clipboard,
             notes_cmd::delete_note,
             tags_cmd::get_tags,
             tags_cmd::save_tag,

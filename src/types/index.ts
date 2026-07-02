@@ -10,7 +10,6 @@ export interface AppSettings {
 }
 
 export interface Note {
-  deleted_at: number | null;
   id: string;
   content: string;
   created_at: number;
@@ -19,6 +18,7 @@ export interface Note {
   tags: string[];
   category: string | null;
   archived: boolean;
+  deleted_at: number | null;
 }
 
 export interface Tag {
@@ -27,12 +27,17 @@ export interface Tag {
   color?: string;
 }
 
+export interface ClipboardEntry {
+  id: string;
+  content: string;
+  content_type: string;
+  content_hash: string;
+  created_at: number;
+  starred: boolean;
+}
+
+export type EditorMode = "edit" | "preview" | "split";
+
+export type Tab = "notes" | "settings" | "clipboard";
+
 export type ExportFormat = "markdown" | "text";
-
-export type EditorMode = "edit" | "preview" | "split";
-
-export type Tab = "notes" | "settings";|export type ExportFormat = "markdown" | "text";
-
-export type EditorMode = "edit" | "preview" | "split";
-
-export type Tab = "notes" | "settings";

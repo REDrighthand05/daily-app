@@ -1,11 +1,13 @@
-﻿import TitleBar from "./TitleBar";
+import TitleBar from "./TitleBar";
 import NoteList from "../notes/NoteList";
 import NoteEditor from "../notes/NoteEditor";
 import NoteSearch from "../notes/NoteSearch";
 import SettingsPage from "../settings/SettingsPage";
+import ClipboardList from "../clipboard/ClipboardList";
 import { useAppStore } from "../../stores/appStore";
 import { useEffect } from "react";
 import { listen } from "@tauri-apps/api/event";
+import { FileText, Clipboard, Settings } from "lucide-react";
 
 export default function Shell() {
   const { activeTab, loadAll, setActiveTab } = useAppStore();
@@ -32,7 +34,28 @@ export default function Shell() {
           </div>
         </div>
       )}
+      {activeTab === "clipboard" && <ClipboardList />}
       {activeTab === "settings" && <SettingsPage />}
+      <div className="tab-bar">
+        <button
+          className={`tab-bar-btn ${activeTab === "notes" ? "active" : ""}`}
+          onClick={() => setActiveTab("notes")}
+        >
+          <FileText size={14} /> Notes
+        </button>
+        <button
+          className={`tab-bar-btn ${activeTab === "clipboard" ? "active" : ""}`}
+          onClick={() => setActiveTab("clipboard")}
+        >
+          <Clipboard size={14} /> Clipboard
+        </button>
+        <button
+          className={`tab-bar-btn ${activeTab === "settings" ? "active" : ""}`}
+          onClick={() => setActiveTab("settings")}
+        >
+          <Settings size={14} /> Settings
+        </button>
+      </div>
     </div>
   );
 }
