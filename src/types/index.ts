@@ -1,4 +1,4 @@
-export interface AppSettings {
+﻿export interface AppSettings {
   theme: "dark" | "light" | "system";
   panel_position: "left" | "right" | "float";
   opacity: number;
@@ -59,3 +59,4 @@ export interface SystemInfo {
 }
 
 export type ExportFormat = "markdown" | "text";
+

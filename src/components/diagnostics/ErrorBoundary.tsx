@@ -1,4 +1,4 @@
-import { Component, type ReactNode } from "react";
+﻿import { Component, type ReactNode } from "react";
 
 interface Props { children: ReactNode; }
 interface State { hasError: boolean; error: Error | null; }
@@ -20,7 +20,7 @@ export default class ErrorBoundary extends Component<Props, State> {
         <div className="error-boundary">
           <h2>Something went wrong</h2>
           <p>{this.state.error?.message}</p>
-          <button onClick={() => { this.setState({ hasError: false }); window.location.reload(); }}>
+          <button onClick={() => { this.setState({ hasError: false }); }}>
             Reload
           </button>
         </div>
@@ -29,3 +29,4 @@ export default class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
+

@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import type { AppSettings, Note, Tab, Tag, EditorMode, ClipboardEntry, SearchResultItem } from "../types";
 import * as ipc from "../bridge/ipc";
 
@@ -66,6 +66,8 @@ const defaults: AppSettings = {
   archive_days: 30,
   accent_color: "#4F8CFF",
   animations_enabled: true,
+  clipboard_enabled: true,
+  clipboard_max_entries: 500,
   language: "en-US",
 };
 

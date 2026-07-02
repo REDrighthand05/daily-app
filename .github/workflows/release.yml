@@ -1,6 +1,4 @@
-# 鏍囩鎺ㄩ€佹椂鏋勫缓 Tauri v2 妗岄潰搴旂敤骞跺彂甯?GitHub Release
-# 娉ㄦ剰锛歐indows runner 鑷甫 Rust + WebView2锛屾棤闇€棰濆瀹夎
-
+﻿# Tauri v2 release workflow — builds on Windows runner via Rust + WebView2, auto-publishes to GitHub Release
 on:
   push:
     tags: ['v*']
@@ -20,6 +18,13 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Sync version from tag (Cargo.toml + tauri.conf.json)
+        shell: pwsh
+        run: |
+          $ver = "${{ github.ref_name }}".TrimStart('v')
+          (Get-Content src-tauri/tauri.conf.json) -replace '"version": ".*?"', "`"version`": `"$ver`"" | Set-Content src-tauri/tauri.conf.json
+          (Get-Content src-tauri/Cargo.toml) -replace '^version = ".*?"', "version = `"$ver`"" | Set-Content src-tauri/Cargo.toml
+
       - run: npm ci --legacy-peer-deps
 
       - run: rustup update stable && rustup default stable
@@ -28,7 +33,7 @@ jobs:
 
       - run: npx tauri build
         env:
-          # CLARIFICATION: 绛惧悕瀵嗛挜涓哄彲閫夌幆澧冨彉閲忋€傚鏋滀粨搴?Secrets 涓湭閰嶇疆鍒欎笉璁剧疆锛屾瀯寤虹粨鏋滀笉绛惧悕銆?          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
 
       - uses: softprops/action-gh-release@v2

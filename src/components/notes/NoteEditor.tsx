@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../stores/appStore";
 import type { Note } from "../../types";
@@ -14,6 +14,7 @@ export default function NoteEditor() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showTagPicker, setShowTagPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const sorted = [...notes].sort((a, b) => b.updated_at - a.updated_at);
   const editingNote = editingId
@@ -38,6 +39,10 @@ export default function NoteEditor() {
     const updated: Note = { ...editingNote, content, updated_at: Date.now() };
     saveNote(updated);
   };
+
+  useEffect(() => {
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, []);
 
   const handleTagToggle = (tagId: string) => {
     const exists = editingNote.tags.includes(tagId);
@@ -98,3 +103,4 @@ export default function NoteEditor() {
     </div>
   );
 }
+

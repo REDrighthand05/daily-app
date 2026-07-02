@@ -1,13 +1,14 @@
-import { useAppStore } from "../../stores/appStore";
+﻿import { useAppStore } from "../../stores/appStore";
 import { Settings, StickyNote } from "lucide-react";
 import type { Tab } from "../../types";
 
 export default function TitleBar() {
+  const { t } = useTranslation();
   const { activeTab, setActiveTab } = useAppStore();
 
   const tabs: { id: Tab; icon: React.ReactNode; label: string }[] = [
-    { id: "notes", icon: <StickyNote size={16} />, label: "Notes" },
-    { id: "settings", icon: <Settings size={16} />, label: "Settings" },
+    { id: "notes", icon: <StickyNote size={16} />, label: t("tabs.notes") },
+    { id: "settings", icon: <Settings size={16} />, label: t("tabs.settings") },
   ];
 
   return (
