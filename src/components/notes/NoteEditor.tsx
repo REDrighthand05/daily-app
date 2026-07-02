@@ -76,7 +76,7 @@ export default function NoteEditor() {
           {showTagPicker ? "Done" : "+ Tags"}
         </button>
       </div>
-      {showTagPicker && <TagPicker selectedIds={editingNote.tags} onToggle={handleTagToggle} />}
+      {showTagPicker && <TagPicker onToggle={handleTagToggle} />}
       <EditorToolbar mode={editorMode} onModeChange={setEditorMode} onInsert={handleInsert} />
       <div className="note-editor-body">
         {editorMode !== "preview" && (

@@ -4,7 +4,9 @@ import { useAppStore } from "../../stores/appStore";
 import type { Tag } from "../../types";
 import { Plus } from "lucide-react";
 
-interface Props {\n  onToggle: (tagId: string) => void;\n}
+interface Props {
+  onToggle: (tagId: string) => void;
+}
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
