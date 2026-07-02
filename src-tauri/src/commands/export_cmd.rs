@@ -1,7 +1,13 @@
 use std::fs;
+use std::path::Path;
+use std::path::Component;
 
 #[tauri::command]
 pub fn write_file(path: String, content: String) -> Result<(), String> {
+    let p = Path::new(&path);
+    if p.components().any(|c| matches!(c, Component::ParentDir)) {
+        return Err("invalid path: traversal detected".into());
+    }
     fs::write(&path, &content).map_err(|e| format!("failed to write: {}", e))
 }
 

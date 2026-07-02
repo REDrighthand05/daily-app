@@ -50,7 +50,7 @@ pub fn run() {
         .manage(settings_store)
         .manage(NotesStore::new())
         .manage(TagsStore::new())
-        .manage(ClipboardStore::new(500))
+        .manage(ClipboardStore::new())
         .setup(move |app| {
             let show_item = MenuItemBuilder::with_id("show", "Show").build(app)?;
             let settings_item = MenuItemBuilder::with_id("settings", "Settings").build(app)?;

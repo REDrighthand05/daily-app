@@ -86,17 +86,19 @@ export const useAppStore = create<AppState>((set, get) => ({
   loaded: false,
 
   loadAll: async () => {
-    try {
-      const [settings, notes, tags, clipboardEntries] = await Promise.all([
-        ipc.getSettings(),
-        ipc.getNotes(),
-        ipc.getTags(),
-        ipc.getClipboardEntries(),
-      ]);
-      set({ settings, notes, tags, clipboardEntries, loaded: true });
-    } catch {
-      set({ loaded: true });
-    }
+    const [settings, notes, tags, clipboardEntries] = await Promise.all([
+      ipc.getSettings().catch(() => undefined),
+      ipc.getNotes().catch(() => [] as Note[]),
+      ipc.getTags().catch(() => [] as Tag[]),
+      ipc.getClipboardEntries().catch(() => [] as ClipboardEntry[]),
+    ]);
+    set({
+      settings: settings || ({ ...defaults } as AppSettings),
+      notes: notes || [],
+      tags: tags || [],
+      clipboardEntries: clipboardEntries || [],
+      loaded: true,
+    });
   },
 
   updateSettings: async (partial) => {

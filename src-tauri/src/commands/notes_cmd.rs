@@ -14,7 +14,7 @@ pub fn save_note(store: State<NotesStore>, note: Note) -> Result<(), String> {
         if let Some(existing) = notes.iter_mut().find(|n| n.id == note.id) {
             *existing = note;
         } else {
-            notes.push(note);
+            notes.insert(0, note);
         }
     }
     store.save()

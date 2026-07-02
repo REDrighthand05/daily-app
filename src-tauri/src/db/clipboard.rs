@@ -17,14 +17,14 @@ pub struct ClipboardEntry {
 pub struct ClipboardStore {
     pub entries: Mutex<Vec<ClipboardEntry>>,
     data_path: PathBuf,
-    max_entries: u32,
+
 }
 
 impl ClipboardStore {
-    pub fn new(max_entries: u32) -> Self {
+    pub fn new() -> Self {
         let data_path = Self::data_path();
         let entries = Self::load_from_file(&data_path).unwrap_or_default();
-        Self { entries: Mutex::new(entries), data_path, max_entries }
+        Self { entries: Mutex::new(entries), data_path }
     }
 
     fn data_path() -> PathBuf {
@@ -39,11 +39,10 @@ impl ClipboardStore {
 
     pub fn save(&self) -> Result<(), String> {
         let entries = self.entries.lock().map_err(|e| e.to_string())?;
-        let trimmed: Vec<_> = entries.iter().take(self.max_entries as usize).cloned().collect();
         if let Some(parent) = self.data_path.parent() {
             fs::create_dir_all(parent).map_err(|e| e.to_string())?;
         }
-        let data = serde_json::to_string_pretty(&trimmed).map_err(|e| e.to_string())?;
+        let data = serde_json::to_string_pretty(&*entries).map_err(|e| e.to_string())?;
         fs::write(&self.data_path, data).map_err(|e| e.to_string())
     }
 }
