@@ -113,6 +113,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       const currentTheme = get().settings.theme;
       const isDark = currentTheme === 'dark' || (currentTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
       ipc.setWindowOpacity(partial.opacity, isDark).catch(() => {});
+      document.documentElement.style.setProperty('--window-alpha', String(partial.opacity));
     }
     if (partial.panel_position !== undefined) {
       ipc.setWindowPosition(partial.panel_position).catch(() => {});
