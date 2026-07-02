@@ -4,16 +4,13 @@ import { useAppStore } from "../../stores/appStore";
 import type { Tag } from "../../types";
 import { Plus } from "lucide-react";
 
-interface Props {
-  selectedIds: string[];
-  onToggle: (tagId: string) => void;
-}
+interface Props {\n  onToggle: (tagId: string) => void;\n}
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-export default function TagPicker({ selectedIds: _selectedIds, onToggle }: Props) {
+export default function TagPicker({ onToggle }: Props) {
   const { tags, saveTag } = useAppStore();
   const [showAdd, setShowAdd] = useState(false);
   const [newName, setNewName] = useState("");
