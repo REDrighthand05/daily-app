@@ -1,5 +1,5 @@
-# 对 frontend-only PR 的前端层 CI 验证
-# 不编译 Rust，只验证 TypeScript、Lint 和 Vite 构建
+# 瀵?frontend-only PR 鐨勫墠绔眰 CI 楠岃瘉
+# 涓嶇紪璇?Rust锛屽彧楠岃瘉 TypeScript銆丩int 鍜?Vite 鏋勫缓
 
 on:
   pull_request:
@@ -17,12 +17,10 @@ jobs:
           node-version: 22
           cache: npm
 
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
 
       - run: npx tsc -b
 
-      # CLARIFICATION: 用户指定 "npm run lint (oxlint)"，但 lint 脚本名称在不同项目可能为 lint 或 oxlint。
-      # 这里按 package.json 中 scripts.lint 的约定执行 npm run lint，预期底层使用 oxlint。
-      - run: npm run lint
+      # CLARIFICATION: 鐢ㄦ埛鎸囧畾 "npm run lint (oxlint)"锛屼絾 lint 鑴氭湰鍚嶇О鍦ㄤ笉鍚岄」鐩彲鑳戒负 lint 鎴?oxlint銆?      # 杩欓噷鎸?package.json 涓?scripts.lint 鐨勭害瀹氭墽琛?npm run lint锛岄鏈熷簳灞備娇鐢?oxlint銆?      - run: npm run lint
 
       - run: npx vite build

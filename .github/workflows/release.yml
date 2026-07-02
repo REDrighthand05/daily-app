@@ -1,5 +1,5 @@
-# 标签推送时构建 Tauri v2 桌面应用并发布 GitHub Release
-# 注意：Windows runner 自带 Rust + WebView2，无需额外安装
+# 鏍囩鎺ㄩ€佹椂鏋勫缓 Tauri v2 妗岄潰搴旂敤骞跺彂甯?GitHub Release
+# 娉ㄦ剰锛歐indows runner 鑷甫 Rust + WebView2锛屾棤闇€棰濆瀹夎
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
           node-version: 22
           cache: npm
 
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
 
       - run: rustup update stable && rustup default stable
 
@@ -28,8 +28,7 @@ jobs:
 
       - run: npx tauri build
         env:
-          # CLARIFICATION: 签名密钥为可选环境变量。如果仓库 Secrets 中未配置则不设置，构建结果不签名。
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          # CLARIFICATION: 绛惧悕瀵嗛挜涓哄彲閫夌幆澧冨彉閲忋€傚鏋滀粨搴?Secrets 涓湭閰嶇疆鍒欎笉璁剧疆锛屾瀯寤虹粨鏋滀笉绛惧悕銆?          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
 
       - uses: softprops/action-gh-release@v2
