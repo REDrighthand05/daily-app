@@ -1,0 +1,30 @@
+name: Changelog Updater
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  update-changelog:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Append changelog entry
+        uses: stefanzweifel/changelog-updater-action@v1
+        with:
+          latest-version: Unreleased
+          release-notes: ${{ github.event.pull_request.title }}
+
+      - name: Commit updated CHANGELOG
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: update CHANGELOG for PR #${{ github.event.pull_request.number }}"
+          file_pattern: CHANGELOG.md

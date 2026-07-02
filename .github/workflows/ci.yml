@@ -1,0 +1,28 @@
+# 对 frontend-only PR 的前端层 CI 验证
+# 不编译 Rust，只验证 TypeScript、Lint 和 Vite 构建
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx tsc -b
+
+      # CLARIFICATION: 用户指定 "npm run lint (oxlint)"，但 lint 脚本名称在不同项目可能为 lint 或 oxlint。
+      # 这里按 package.json 中 scripts.lint 的约定执行 npm run lint，预期底层使用 oxlint。
+      - run: npm run lint
+
+      - run: npx vite build
