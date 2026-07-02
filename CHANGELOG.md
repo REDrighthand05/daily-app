@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to Daily will be documented in this file.
 

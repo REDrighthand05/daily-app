@@ -1,10 +1,12 @@
-use tauri::{
+﻿use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
     Emitter, Manager, WindowEvent,
 };
 use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 use std::str::FromStr;
+use std::sync::{Arc, Mutex};
+use std::time::Instant;
 
 mod settings;
 mod db;
@@ -106,13 +108,36 @@ pub fn run() {
 
             if let Some(window) = app.get_webview_window("main") {
                 position_panel(&window, &settings);
+                let alpha = (settings.opacity * 255.0) as u8;
+                if settings.theme == "light" {
+                    let _ = window.set_background_color(Some((255, 255, 255, alpha).into()));
+                } else {
+                    let _ = window.set_background_color(Some((0, 0, 0, alpha).into()));
+                }
 
                 let handle = app.handle().clone();
+                let last_focus_lost = Arc::new(Mutex::new(None::<Instant>));
+                let flag = last_focus_lost.clone();
                 window.on_window_event(move |event| {
-                    if let WindowEvent::Focused(false) = event {
-                        if let Some(w) = handle.get_webview_window("main") {
-                            let _ = w.hide();
+                    match event {
+                        WindowEvent::Focused(false) => {
+                            let ts = Instant::now();
+                            *last_focus_lost.lock().unwrap() = Some(ts);
+                            let h = handle.clone();
+                            let f = flag.clone();
+                            std::thread::spawn(move || {
+                                std::thread::sleep(std::time::Duration::from_millis(300));
+                                if *f.lock().unwrap() == Some(ts) {
+                                    if let Some(w) = h.get_webview_window("main") {
+                                        let _ = w.hide();
+                                    }
+                                }
+                            });
                         }
+                        WindowEvent::Focused(true) => {
+                            *last_focus_lost.lock().unwrap() = None;
+                        }
+                        _ => {}
                     }
                 });
             }

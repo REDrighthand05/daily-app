@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/core";
+﻿import { invoke } from "@tauri-apps/api/core";
 import type { AppSettings, Note, Tag, ClipboardEntry, SearchResultItem, SystemInfo } from "../types";
 
 export const getSettings = (): Promise<AppSettings> => invoke("get_settings");
@@ -70,7 +70,7 @@ export const factoryReset = (): Promise<void> =>
 
 // Window management
 export const setWindowOpacity = (opacity: number): Promise<void> =>
-  invoke("set_window_opacity", { opacity });
+  invoke("set_window_opacity", { opacity, isDark });
 export const setWindowPosition = (position: string): Promise<void> =>
   invoke("set_window_position", { position });
 export const detachWindow = (): Promise<void> => invoke("detach_window");
