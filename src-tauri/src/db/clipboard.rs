@@ -17,7 +17,7 @@ pub struct ClipboardEntry {
 pub struct ClipboardStore {
     pub entries: Mutex<Vec<ClipboardEntry>>,
     data_path: PathBuf,
-    max_entries: usize,
+    max_entries: u32,
 }
 
 impl ClipboardStore {
