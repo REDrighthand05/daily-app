@@ -4,17 +4,33 @@ import { Sun, Moon, Monitor, Palette, AlignLeft, AlignRight } from "lucide-react
 import ThemePicker from "../theme/ThemePicker";
 import { useTranslation } from "react-i18next";
 import LanguagePicker from "./LanguagePicker";
+import { exportBackup, importBackup, factoryReset } from "../../bridge/ipc";
 import CollapsibleSection from "../layout/CollapsibleSection";
 
 export default function SettingsPage() {
   const { t } = useTranslation();
-  const { settings, updateSettings } = useAppStore();
+  const { settings, updateSettings, loadAll } = useAppStore();
 
   const themes: { value: AppSettings["theme"]; icon: React.ReactNode; label: string }[] = [
     { value: "light", icon: <Sun size={18} />, label: t("settings.light") },
     { value: "dark", icon: <Moon size={18} />, label: t("settings.dark") },
     { value: "system", icon: <Monitor size={18} />, label: t("settings.system") },
   ];
+
+  
+  const handleExport = async () => {
+    const { save } = await import("@tauri-apps/plugin-dialog");
+    const p = await save({ filters: [{ name: "Backup", extensions: ["zip"] }], defaultPath: "daily-backup.zip" });
+    if (p) await exportBackup(p);
+  };
+  const handleImport = async () => {
+    const { open } = await import("@tauri-apps/plugin-dialog");
+    const p = await open({ filters: [{ name: "Backup", extensions: ["zip"] }] });
+    if (p) { await importBackup(p); await loadAll(); }
+  };
+  const handleReset = async () => {
+    if (confirm("Delete all data?")) { await factoryReset(); await loadAll(); }
+  };
 
   const positions: { value: AppSettings["panel_position"]; icon: React.ReactNode; label: string }[] = [
     { value: "left", icon: <AlignLeft size={18} />, label: t("settings.left") },
@@ -109,6 +125,14 @@ export default function SettingsPage() {
           readOnly
           placeholder="Alt+Space"
         />
+      </section>
+          <section>
+        <h3>Data</h3>
+        <div className="settings-actions">
+          <button className="settings-action-btn" onClick={handleExport}>Export Backup</button>
+          <button className="settings-action-btn" onClick={handleImport}>Import Backup</button>
+          <button className="settings-action-btn danger" onClick={handleReset}>Factory Reset</button>
+        </div>
       </section>
     </div>
   );

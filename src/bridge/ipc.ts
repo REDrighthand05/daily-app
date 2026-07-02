@@ -55,6 +55,14 @@ export const writeFile = (path: string, content: string): Promise<void> =>
 export const batchExport = (baseDir: string, notes: Note[], format: string): Promise<void> =>
   invoke("batch_export", { baseDir, notes, format });
 
+// Backup
+export const exportBackup = (path: string): Promise<void> =>
+  invoke("export_backup", { path });
+export const importBackup = (path: string): Promise<void> =>
+  invoke("import_backup", { path });
+export const factoryReset = (): Promise<void> =>
+  invoke("factory_reset");
+
 // Window management
 export const setWindowOpacity = (opacity: number): Promise<void> =>
   invoke("set_window_opacity", { opacity });
