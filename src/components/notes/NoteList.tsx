@@ -1,19 +1,26 @@
 import { useAppStore } from "../../stores/appStore";
 import type { Note } from "../../types";
 import { Plus, Pin, Trash2 } from "lucide-react";
+import CategoryFilter from "../tags/CategoryFilter";
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
 export default function NoteList() {
-  const { notes, searchQuery, saveNote, deleteNote } = useAppStore();
+  const { notes, searchQuery, selectedTagId, saveNote, deleteNote } = useAppStore();
 
-  const filtered = searchQuery
-    ? notes.filter((n) =>
-        n.content.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : notes;
+  let filtered = notes;
+
+  if (selectedTagId) {
+    filtered = filtered.filter((n) => n.tags.includes(selectedTagId));
+  }
+
+  if (searchQuery) {
+    filtered = filtered.filter((n) =>
+      n.content.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
 
   const sorted = [...filtered].sort((a, b) => {
     if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
@@ -28,6 +35,9 @@ export default function NoteList() {
       created_at: now,
       updated_at: now,
       pinned: false,
+      tags: [],
+      category: null,
+      archived: false,
     };
     await saveNote(note);
   };
@@ -40,6 +50,7 @@ export default function NoteList() {
           <Plus size={16} />
         </button>
       </div>
+      <CategoryFilter />
       <div className="note-list-items">
         {sorted.map((note) => (
           <NoteListItem

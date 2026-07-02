@@ -1,4 +1,4 @@
-﻿export interface AppSettings {
+export interface AppSettings {
   theme: "dark" | "light" | "system";
   panel_position: "left" | "right" | "float";
   opacity: number;
@@ -14,6 +14,15 @@ export interface Note {
   created_at: number;
   updated_at: number;
   pinned: boolean;
+  tags: string[];
+  category: string | null;
+  archived: boolean;
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+  color?: string;
 }
 
 export type Tab = "notes" | "settings";

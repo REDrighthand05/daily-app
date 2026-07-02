@@ -13,7 +13,8 @@ mod window;
 
 use settings::SettingsStore;
 use db::notes::NotesStore;
-use commands::{settings_cmd, notes_cmd};
+use db::tags::TagsStore;
+use commands::{settings_cmd, notes_cmd, tags_cmd};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -45,6 +46,7 @@ pub fn run() {
         )
         .manage(settings_store)
         .manage(NotesStore::new())
+        .manage(TagsStore::new())
         .setup(move |app| {
             let show_item = MenuItemBuilder::with_id("show", "Show").build(app)?;
             let settings_item = MenuItemBuilder::with_id("settings", "Settings").build(app)?;
@@ -117,6 +119,10 @@ pub fn run() {
             notes_cmd::get_notes,
             notes_cmd::save_note,
             notes_cmd::delete_note,
+            tags_cmd::get_tags,
+            tags_cmd::save_tag,
+            tags_cmd::delete_tag,
+            tags_cmd::filter_notes_by_tag,
             window::set_window_opacity,
             window::set_window_position,
             window::detach_window,

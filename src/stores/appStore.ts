@@ -1,12 +1,14 @@
 import { create } from "zustand";
-import type { AppSettings, Note, Tab } from "../types";
+import type { AppSettings, Note, Tab, Tag } from "../types";
 import * as ipc from "../bridge/ipc";
 
 interface AppState {
   settings: AppSettings;
   notes: Note[];
+  tags: Tag[];
   activeTab: Tab;
   searchQuery: string;
+  selectedTagId: string | null;
   loaded: boolean;
 
   loadAll: () => Promise<void>;
@@ -16,6 +18,12 @@ interface AppState {
   deleteNote: (id: string) => Promise<void>;
   setActiveTab: (tab: Tab) => void;
   setSearchQuery: (q: string) => void;
+
+  // Tags
+  loadTags: () => Promise<void>;
+  saveTag: (tag: Tag) => Promise<void>;
+  deleteTag: (id: string) => Promise<void>;
+  setSelectedTagId: (id: string | null) => void;
 }
 
 const defaults: AppSettings = {
@@ -28,20 +36,27 @@ const defaults: AppSettings = {
   window_height: 720,
 };
 
+function generateId(): string {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
 export const useAppStore = create<AppState>((set, get) => ({
   settings: { ...defaults },
   notes: [],
+  tags: [],
   activeTab: "notes",
   searchQuery: "",
+  selectedTagId: null,
   loaded: false,
 
   loadAll: async () => {
     try {
-      const [settings, notes] = await Promise.all([
+      const [settings, notes, tags] = await Promise.all([
         ipc.getSettings(),
         ipc.getNotes(),
+        ipc.getTags(),
       ]);
-      set({ settings, notes, loaded: true });
+      set({ settings, notes, tags, loaded: true });
     } catch {
       set({ loaded: true });
     }
@@ -53,7 +68,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     await ipc.saveSettings(updated);
     set({ settings: updated });
 
-    // Call window IPC for real-time effects
     if (partial.opacity !== undefined) {
       ipc.setWindowOpacity(partial.opacity).catch(() => {});
     }
@@ -82,4 +96,31 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   setActiveTab: (tab) => set({ activeTab: tab }),
   setSearchQuery: (q) => set({ searchQuery: q }),
+  setSelectedTagId: (id) => set({ selectedTagId: id }),
+
+  // Tags
+  loadTags: async () => {
+    try {
+      const tags = await ipc.getTags();
+      set({ tags });
+    } catch {
+      // ignore
+    }
+  },
+
+  saveTag: async (tag) => {
+    await ipc.saveTag(tag);
+    const tags = get().tags;
+    const idx = tags.findIndex((t) => t.id === tag.id);
+    if (idx >= 0) {
+      set({ tags: tags.map((t) => (t.id === tag.id ? tag : t)) });
+    } else {
+      set({ tags: [...tags, tag] });
+    }
+  },
+
+  deleteTag: async (id) => {
+    await ipc.deleteTag(id);
+    set({ tags: get().tags.filter((t) => t.id !== id) });
+  },
 }));

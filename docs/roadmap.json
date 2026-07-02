@@ -1,0 +1,623 @@
+{
+  "$schema": "Daily App Super Roadmap v1",
+  "project": {
+    "name": "Daily",
+    "current_version": "0.1.0",
+    "repo": "https://github.com/REDrighthand05/daily-app",
+    "stack": "Tauri v2 + React 19 + TypeScript 6 + Zustand 5 + Rust 2021",
+    "last_updated": "2026-07-02"
+  },
+  "version_map": {
+    "0.2.0": { "name": "Notes Enhanced", "phases": ["phase1"], "modules": [1,2,3,4] },
+    "0.3.0": { "name": "Clipboard History", "phases": ["phase2"], "modules": [5,6] },
+    "0.4.0": { "name": "UI Overhaul", "phases": ["phase3"], "modules": [7,8,9] },
+    "0.5.0": { "name": "Production Grade", "phases": ["phase4"], "modules": [10,11,12] },
+    "0.6.0": { "name": "Ecosystem", "phases": ["phase5"], "modules": [13,14,15] }
+  },
+  "modules": [
+    {
+      "id": 1,
+      "phase": "phase1",
+      "name": "Note Categories & Tags",
+      "description": "Add a tagging system to notes with category grouping. Notes gain a 'tags' array and optional 'category' field. The UI gets tag chips inline in NoteEditor, a tag cloud/filter sidebar in NoteList, and persist to SQLite for efficient querying.",
+      "exports": {
+        "rust": ["commands/tags_cmd.rs (get_tags, save_note_tags, filter_by_tag)"],
+        "react": ["components/tags/TagChip.tsx", "components/tags/TagPicker.tsx", "components/tags/CategoryFilter.tsx"]
+      },
+      "imports": {
+        "rust": ["db/notes.rs (Note struct extended)", "lib.rs (register tag commands)"],
+        "react": ["types/index.ts (Note, Tag, Category types)", "stores/appStore.ts (tag state)", "bridge/ipc.ts (tag IPC)", "components/notes/NoteEditor.tsx", "components/notes/NoteList.tsx"]
+      },
+      "dataModels": [
+        "Tag { id: string; name: string; color?: string; }",
+        "Note extended: + tags: string[] (tag IDs), + category: string | null, + archived: boolean",
+        "NoteTag { note_id: string; tag_id: string; } — SQLite junction table"
+      ],
+      "targetFiles": {
+        "create": [
+          "src-tauri/src/db/tags.rs",
+          "src-tauri/src/commands/tags_cmd.rs",
+          "src/components/tags/TagChip.tsx",
+          "src/components/tags/TagPicker.tsx",
+          "src/components/tags/CategoryFilter.tsx"
+        ],
+        "modify": [
+          "src-tauri/src/db/notes.rs (add tags/category/archived to schema)",
+          "src-tauri/src/db/mod.rs (re-export tags)",
+          "src-tauri/src/commands/mod.rs (re-export tags_cmd)",
+          "src-tauri/src/commands/notes_cmd.rs (extend for tag-filtered queries)",
+          "src-tauri/src/lib.rs (register new commands)",
+          "src/types/index.ts (Tag, Category, Note extension)",
+          "src/stores/appStore.ts (tag state, filter state)",
+          "src/bridge/ipc.ts (tag IPC wrappers)",
+          "src/components/notes/NoteEditor.tsx (tag input UI)",
+          "src/components/notes/NoteList.tsx (tag filter sidebar)"
+        ]
+      },
+      "dependencies": [],
+      "buildOrder": 1
+    },
+    {
+      "id": 2,
+      "phase": "phase1",
+      "name": "Markdown Rendering",
+      "description": "Add a Markdown preview/edit toggle to NoteEditor. Use a Rust markdown parser (pulldown-cmark) to render HTML. The frontend renders the HTML in a preview pane with syntax highlighting for code blocks via highlight.js.",
+      "exports": {
+        "rust": ["commands/markdown_cmd.rs (render_markdown)"],
+        "react": ["components/notes/MarkdownPreview.tsx", "components/notes/EditorToolbar.tsx"]
+      },
+      "imports": {
+        "rust": ["Cargo.toml (pulldown-cmark)", "lib.rs"],
+        "react": ["package.json (highlight.js)", "components/notes/NoteEditor.tsx", "styles/components.css"]
+      },
+      "dataModels": ["EditorMode: 'edit' | 'preview' | 'split'"],
+      "targetFiles": {
+        "create": [
+          "src-tauri/src/commands/markdown_cmd.rs",
+          "src/components/notes/MarkdownPreview.tsx",
+          "src/components/notes/EditorToolbar.tsx"
+        ],
+        "modify": [
+          "src-tauri/Cargo.toml (add pulldown-cmark)",
+          "src-tauri/src/lib.rs (register render_markdown)",
+          "src-tauri/src/commands/mod.rs",
+          "package.json (add highlight.js)",
+          "src/types/index.ts (EditorMode type)",
+          "src/stores/appStore.ts (editorMode state)",
+          "src/bridge/ipc.ts (render_markdown IPC)",
+          "src/components/notes/NoteEditor.tsx (integrate preview toggle)",
+          "src/styles/components.css (markdown preview styles)"
+        ]
+      },
+      "dependencies": [1],
+      "buildOrder": 2
+    },
+    {
+      "id": 3,
+      "phase": "phase1",
+      "name": "Note Export",
+      "description": "Allow users to export notes individually or in bulk as plain text (.txt) or Markdown (.md). Use Tauri's file dialog plugin for save-as dialogs. Support per-note export from the note menu, batch export from NoteList, and export with metadata (created_at, tags as YAML frontmatter).",
+      "exports": {
+        "rust": ["commands/export_cmd.rs (export_note, export_all_notes)"],
+        "react": ["components/notes/ExportMenu.tsx"]
+      },
+      "imports": {
+        "rust": ["Cargo.toml (tauri-plugin-dialog)", "db/notes.rs", "lib.rs"],
+        "react": ["package.json (@tauri-apps/plugin-dialog)", "bridge/ipc.ts", "components/notes/NoteList.tsx", "components/notes/NoteEditor.tsx"]
+      },
+      "dataModels": [
+        "ExportFormat: 'txt' | 'md'",
+        "ExportOptions { format: ExportFormat; include_metadata: boolean; note_ids?: string[] }"
+      ],
+      "targetFiles": {
+        "create": [
+          "src-tauri/src/commands/export_cmd.rs",
+          "src/components/notes/ExportMenu.tsx"
+        ],
+        "modify": [
+          "src-tauri/Cargo.toml (add tauri-plugin-dialog)",
+          "src-tauri/src/lib.rs (register export commands, plugin)",
+          "src-tauri/src/commands/mod.rs",
+          "src-tauri/capabilities/default.json (add dialog permission)",
+          "package.json (add @tauri-apps/plugin-dialog)",
+          "src/types/index.ts (ExportFormat, ExportOptions)",
+          "src/bridge/ipc.ts (export IPC)",
+          "src/components/notes/NoteList.tsx (batch export button)",
+          "src/components/notes/NoteEditor.tsx (per-note export button)"
+        ]
+      },
+      "dependencies": [1, 2],
+      "buildOrder": 3
+    },
+    {
+      "id": 4,
+      "phase": "phase1",
+      "name": "Note Pinning & Archive",
+      "description": "Extend note lifecycle: pin important notes to top of list, archive old notes to a separate view, soft-delete with 7-day trash. Add configurable auto-archive for notes not edited in N days.",
+      "exports": {
+        "rust": ["commands/notes_cmd.rs (extended: archive_note, restore_note, purge_trash)"],
+        "react": ["components/notes/ArchiveToggle.tsx", "components/notes/TrashBin.tsx"]
+      },
+      "imports": {
+        "rust": ["db/notes.rs", "settings.rs (archive_days setting)", "lib.rs"],
+        "react": ["types/index.ts", "stores/appStore.ts", "bridge/ipc.ts", "components/notes/NoteList.tsx", "components/layout/Shell.tsx"]
+      },
+      "dataModels": [
+        "Note extended: + archived: bool, + deleted_at: u64 | null, + pinned (existing, used for UI sort)",
+        "AppSettings extended: + archive_days: u32 (default 30)"
+      ],
+      "targetFiles": {
+        "create": [
+          "src/components/notes/ArchiveToggle.tsx",
+          "src/components/notes/TrashBin.tsx"
+        ],
+        "modify": [
+          "src-tauri/src/db/notes.rs (add archived, deleted_at fields; soft-delete logic)",
+          "src-tauri/src/commands/notes_cmd.rs (archive_note, restore_note, purge_trash commands)",
+          "src-tauri/src/settings.rs (archive_days field)",
+          "src-tauri/src/lib.rs (register new commands)",
+          "src/types/index.ts (Note extension, trash state)",
+          "src/stores/appStore.ts (archive/trash actions, auto-archive setting)",
+          "src/bridge/ipc.ts (archive/trash IPC)",
+          "src/components/notes/NoteList.tsx (pinned section, archive/trash filter)",
+          "src/components/layout/Shell.tsx (archive/trash navigation tabs)",
+          "src/components/settings/SettingsPage.tsx (archive_days setting)"
+        ]
+      },
+      "dependencies": [1],
+      "buildOrder": 4
+    },
+    {
+      "id": 5,
+      "phase": "phase2",
+      "name": "Clipboard Monitor Backend",
+      "description": "Rust-side clipboard watcher using arboard crate. Monitors system clipboard on a background thread, hashes content for dedup, stores entries in SQLite. Emits events to the frontend via Tauri events. Respects max-history size and ignored-apps list.",
+      "exports": {
+        "rust": ["db/clipboard.rs (ClipboardStore)", "commands/clipboard_cmd.rs", "clipboard/monitor.rs (ClipboardWatcher background task)"],
+        "events": ["clipboard:changed"]
+      },
+      "imports": {
+        "rust": ["Cargo.toml (arboard, sha2, image)", "lib.rs (manage ClipboardStore, start watcher)", "settings.rs"],
+        "react": ["types/index.ts", "stores/appStore.ts", "bridge/ipc.ts"]
+      },
+      "dataModels": [
+        "ClipboardEntry { id: string; content: string; content_type: 'text'|'image'|'html'|'rtf'; content_hash: string; thumbnail_path: string|null; created_at: u64; starred: bool; source_app: string|null }",
+        "AppSettings extended: + clipboard_enabled: bool, + clipboard_max_entries: u32 (default 500), + clipboard_ignored_apps: Vec<String>"
+      ],
+      "targetFiles": {
+        "create": [
+          "src-tauri/src/db/clipboard.rs",
+          "src-tauri/src/clipboard/mod.rs",
+          "src-tauri/src/clipboard/monitor.rs",
+          "src-tauri/src/commands/clipboard_cmd.rs"
+        ],
+        "modify": [
+          "src-tauri/Cargo.toml (add arboard, sha2, image, base64)",
+          "src-tauri/src/db/mod.rs",
+          "src-tauri/src/commands/mod.rs",
+          "src-tauri/src/settings.rs (clipboard settings)",
+          "src-tauri/src/lib.rs (manage ClipboardStore, register commands, start watcher)",
+          "src-tauri/capabilities/default.json",
+          "src/types/index.ts (ClipboardEntry types)",
+          "src/stores/appStore.ts (clipboard slice)",
+          "src/bridge/ipc.ts (clipboard IPC)"
+        ]
+      },
+      "dependencies": [],
+      "buildOrder": 5
+    },
+    {
+      "id": 6,
+      "phase": "phase2",
+      "name": "Clipboard History UI",
+      "description": "Frontend UI for clipboard history. New 'Clipboard' tab showing scrollable list with text preview, type icon, timestamp, star. Click to copy back to system clipboard. Search/filter. Starred section. Image preview in detail view.",
+      "exports": {
+        "react": ["components/clipboard/ClipboardList.tsx", "components/clipboard/ClipboardEntry.tsx", "components/clipboard/ClipboardSearch.tsx", "components/clipboard/ClipboardDetail.tsx"]
+      },
+      "imports": {
+        "react": ["package.json (@tauri-apps/plugin-clipboard-manager)", "types/index.ts", "stores/appStore.ts", "bridge/ipc.ts", "components/layout/Shell.tsx", "styles/components.css"]
+      },
+      "dataModels": ["Tab extended: 'clipboard'"],
+      "targetFiles": {
+        "create": [
+          "src/components/clipboard/ClipboardList.tsx",
+          "src/components/clipboard/ClipboardEntry.tsx",
+          "src/components/clipboard/ClipboardSearch.tsx",
+          "src/components/clipboard/ClipboardDetail.tsx"
+        ],
+        "modify": [
+          "package.json (add @tauri-apps/plugin-clipboard-manager)",
+          "src/types/index.ts (Tab: 'clipboard')",
+          "src/stores/appStore.ts (clipboard UI state)",
+          "src/bridge/ipc.ts (clipboard write-back IPC)",
+          "src/components/layout/Shell.tsx (Clipboard tab)",
+          "src/styles/components.css (clipboard styles)",
+          "src-tauri/capabilities/default.json"
+        ]
+      },
+      "dependencies": [5],
+      "buildOrder": 6
+    },
+    {
+      "id": 7,
+      "phase": "phase3",
+      "name": "Global Search Overlay",
+      "description": "Unified search overlay (Ctrl+F) querying notes and clipboard simultaneously via a single Rust command. Grouped virtual list with keyboard navigation. Appears as floating panel within the sidebar, replacing per-module search fields.",
+      "exports": {
+        "rust": ["commands/search_cmd.rs (global_search)"],
+        "react": ["components/search/SearchOverlay.tsx", "components/search/SearchResult.tsx"]
+      },
+      "imports": {
+        "rust": ["db/notes.rs", "db/clipboard.rs", "lib.rs"],
+        "react": ["stores/appStore.ts", "bridge/ipc.ts", "components/layout/TitleBar.tsx", "components/layout/Shell.tsx"]
+      },
+      "dataModels": [
+        "SearchResult { id: string; source: 'note'|'clipboard'; title: string; snippet: string; score: number; timestamp: u64; }",
+        "SearchQuery { text: string; sources: ('note'|'clipboard')[]; }"
+      ],
+      "targetFiles": {
+        "create": [
+          "src-tauri/src/commands/search_cmd.rs",
+          "src/components/search/SearchOverlay.tsx",
+          "src/components/search/SearchResult.tsx"
+        ],
+        "modify": [
+          "src-tauri/src/commands/mod.rs",
+          "src-tauri/src/lib.rs (register global_search)",
+          "src/types/index.ts (SearchResult, SearchQuery)",
+          "src/stores/appStore.ts (search overlay state)",
+          "src/bridge/ipc.ts (search IPC)",
+          "src/components/layout/TitleBar.tsx (search icon)",
+          "src/components/layout/Shell.tsx (render overlay)",
+          "src/styles/components.css (overlay styles)"
+        ]
+      },
+      "dependencies": [1, 2, 5, 6],
+      "buildOrder": 7
+    },
+    {
+      "id": 8,
+      "phase": "phase3",
+      "name": "Drag & Drop Reordering",
+      "description": "Add drag-and-drop reorder to NoteList and ClipboardList using @dnd-kit. Persistent sort_order in backend. Keyboard-accessible reordering (Alt+Up/Down). Batch-update command for sync.",
+      "exports": {
+        "rust": ["commands/notes_cmd.rs (reorder_notes)", "commands/clipboard_cmd.rs (reorder_clipboard)"],
+        "react": ["hooks/useDragSortable.ts"]
+      },
+      "imports": {
+        "rust": ["db/notes.rs", "db/clipboard.rs", "lib.rs"],
+        "react": ["package.json (@dnd-kit/core, @dnd-kit/sortable)", "types/index.ts", "components/notes/NoteList.tsx", "components/clipboard/ClipboardList.tsx"]
+      },
+      "dataModels": [
+        "Note extended: + sort_order: u32",
+        "ClipboardEntry extended: + sort_order: u32 (starred section only)"
+      ],
+      "targetFiles": {
+        "create": ["src/hooks/useDragSortable.ts"],
+        "modify": [
+          "src-tauri/src/db/notes.rs (sort_order, batch reorder)",
+          "src-tauri/src/db/clipboard.rs (sort_order)",
+          "src-tauri/src/commands/notes_cmd.rs (reorder_notes)",
+          "src-tauri/src/commands/clipboard_cmd.rs (reorder_clipboard)",
+          "src-tauri/src/lib.rs (register commands)",
+          "package.json (add @dnd-kit)",
+          "src/types/index.ts (extensions)",
+          "src/stores/appStore.ts (reorder actions)",
+          "src/bridge/ipc.ts (reorder IPC)",
+          "src/components/notes/NoteList.tsx (DndContext)",
+          "src/components/clipboard/ClipboardList.tsx (DndContext)"
+        ]
+      },
+      "dependencies": [1, 6],
+      "buildOrder": 8
+    },
+    {
+      "id": 9,
+      "phase": "phase3",
+      "name": "UI Polish & Custom Themes",
+      "description": "Comprehensive UI refresh: CSS transitions/animations (slide-in, crossfade, scale+fade for list items), collapsible sections, custom accent color picker, screenshot preview in clipboard detail, refined acrylic blending.",
+      "exports": {
+        "react": ["components/theme/ThemePicker.tsx", "components/layout/CollapsibleSection.tsx"]
+      },
+      "imports": {
+        "rust": ["settings.rs (accent_color, animations_enabled)"],
+        "react": ["stores/appStore.ts", "styles/global.css", "styles/components.css", "components/layout/Shell.tsx", "components/settings/SettingsPage.tsx", "components/clipboard/ClipboardDetail.tsx"]
+      },
+      "dataModels": [
+        "AppSettings extended: + accent_color: string (hex, default '#4F8CFF'), + animations_enabled: bool (default true)"
+      ],
+      "targetFiles": {
+        "create": [
+          "src/components/theme/ThemePicker.tsx",
+          "src/components/layout/CollapsibleSection.tsx"
+        ],
+        "modify": [
+          "src-tauri/src/settings.rs (accent_color, animations_enabled fields)",
+          "src/types/index.ts (AppSettings extension)",
+          "src/stores/appStore.ts (theme state)",
+          "src/styles/global.css (--accent-color variable, transition tokens)",
+          "src/styles/components.css (animation keyframes, collapsible, image preview area)",
+          "src/components/layout/Shell.tsx (accent-color CSS var, transitions)",
+          "src/components/layout/TitleBar.tsx (hover polish)",
+          "src/components/notes/NoteList.tsx (collapsible sections, animations)",
+          "src/components/notes/NoteEditor.tsx (editor transitions)",
+          "src/components/clipboard/ClipboardList.tsx (animations)",
+          "src/components/clipboard/ClipboardDetail.tsx (image preview)",
+          "src/components/settings/SettingsPage.tsx (accent color picker, animation toggle)"
+        ]
+      },
+      "dependencies": [6, 8],
+      "buildOrder": 9
+    },
+    {
+      "id": 10,
+      "phase": "phase4",
+      "name": "Testing Infrastructure",
+      "description": "Set up Vitest for React/store unit tests, Rust #[cfg(test)] for backend, WebDriverIO for E2E. Add test CI job to GitHub Actions. Target 80%+ coverage on core logic.",
+      "exports": {
+        "config": ["vitest.config.ts", "wdio.conf.ts"],
+        "tests": ["src/__tests__/", "src-tauri/src/db/notes_tests.rs", "tests/e2e/"]
+      },
+      "imports": {
+        "react": ["package.json (vitest, @testing-library/react, jsdom)"],
+        "rust": ["Cargo.toml (tempfile, serial_test dev-deps)"],
+        "ci": [".github/workflows/ci.yml"]
+      },
+      "dataModels": [],
+      "targetFiles": {
+        "create": [
+          "vitest.config.ts",
+          "src/__tests__/stores/appStore.test.ts",
+          "src/__tests__/components/NoteList.test.tsx",
+          "src/__tests__/components/NoteEditor.test.tsx",
+          "src/__tests__/components/SearchOverlay.test.tsx",
+          "src/__tests__/components/ClipboardList.test.tsx",
+          "src-tauri/src/db/notes_tests.rs",
+          "src-tauri/src/db/clipboard_tests.rs",
+          "src-tauri/tests/integration_test.rs",
+          "tests/e2e/wdio.conf.ts",
+          "tests/e2e/specs/notes.e2e.ts",
+          "tests/e2e/specs/clipboard.e2e.ts",
+          "tests/e2e/specs/search.e2e.ts",
+          ".github/workflows/test.yml"
+        ],
+        "modify": [
+          "package.json (test scripts + devDeps)",
+          "src-tauri/Cargo.toml (dev-dependencies)",
+          ".github/workflows/ci.yml (test job)",
+          "tsconfig.json (test paths if needed)"
+        ]
+      },
+      "dependencies": [1,2,3,4,5,6,7,8,9],
+      "buildOrder": 10
+    },
+    {
+      "id": 11,
+      "phase": "phase4",
+      "name": "Internationalization (i18n)",
+      "description": "Add i18next + react-i18next with namespace lazy loading. Externalize all UI strings into en-US and zh-CN locale JSON files. Auto-detect system language with manual override in settings.",
+      "exports": {
+        "react": ["src/i18n.ts", "src/locales/en-US/", "src/locales/zh-CN/"]
+      },
+      "imports": {
+        "react": ["package.json (i18next, react-i18next, i18next-browser-languagedetector)", "All UI components (replace hardcoded strings)"],
+        "rust": ["settings.rs (language field)"]
+      },
+      "dataModels": [
+        "AppSettings extended: + language: string (default 'auto')"
+      ],
+      "targetFiles": {
+        "create": [
+          "src/i18n.ts",
+          "src/locales/en-US/common.json",
+          "src/locales/en-US/notes.json",
+          "src/locales/en-US/clipboard.json",
+          "src/locales/en-US/settings.json",
+          "src/locales/zh-CN/common.json",
+          "src/locales/zh-CN/notes.json",
+          "src/locales/zh-CN/clipboard.json",
+          "src/locales/zh-CN/settings.json"
+        ],
+        "modify": [
+          "package.json (add i18next deps)",
+          "src/main.tsx (import i18n setup)",
+          "src-tauri/src/settings.rs (language field)",
+          "src/types/index.ts (AppSettings extension)",
+          "src/components/layout/Shell.tsx (t() calls)",
+          "src/components/layout/TitleBar.tsx (t() calls)",
+          "src/components/notes/NoteEditor.tsx (t() calls)",
+          "src/components/notes/NoteList.tsx (t() calls)",
+          "src/components/notes/NoteSearch.tsx (t() calls)",
+          "src/components/notes/MarkdownPreview.tsx (t() calls)",
+          "src/components/notes/ExportMenu.tsx (t() calls)",
+          "src/components/clipboard/ClipboardList.tsx (t() calls)",
+          "src/components/clipboard/ClipboardEntry.tsx (t() calls)",
+          "src/components/clipboard/ClipboardSearch.tsx (t() calls)",
+          "src/components/clipboard/ClipboardDetail.tsx (t() calls)",
+          "src/components/search/SearchOverlay.tsx (t() calls)",
+          "src/components/settings/SettingsPage.tsx (t() calls)",
+          "src/components/tags/TagChip.tsx (t() calls)",
+          "src/components/tags/TagPicker.tsx (t() calls)",
+          "src/components/theme/ThemePicker.tsx (t() calls)"
+        ]
+      },
+      "dependencies": [1,2,3,4,5,6,7,8,9],
+      "buildOrder": 11
+    },
+    {
+      "id": 12,
+      "phase": "phase4",
+      "name": "Build & Code Signing",
+      "description": "Productionize builds: Windows code signing via GitHub Secrets, MSI/NSIS installers, auto-updater with tauri-plugin-updater. Publish workflow triggered by version tags building signed artifacts.",
+      "exports": {
+        "ci": [".github/workflows/publish.yml"],
+        "config": ["tauri.conf.json bundle/updater"]
+      },
+      "imports": {
+        "rust": ["Cargo.toml (tauri-plugin-updater)"],
+        "ci": [".github/workflows/ci.yml"]
+      },
+      "dataModels": [
+        "tauri.conf.json bundle.windows.wix",
+        "tauri.conf.json bundle.windows.nsis",
+        "tauri.conf.json plugins.updater endpoints"
+      ],
+      "targetFiles": {
+        "create": [".github/workflows/publish.yml"],
+        "modify": [
+          "src-tauri/Cargo.toml (add tauri-plugin-updater)",
+          "src-tauri/tauri.conf.json (bundle config, updater plugin)",
+          "src-tauri/src/lib.rs (register updater plugin)",
+          "src-tauri/capabilities/default.json"
+        ]
+      },
+      "dependencies": [10],
+      "buildOrder": 12
+    },
+    {
+      "id": 13,
+      "phase": "phase5",
+      "name": "Cross-Platform Support",
+      "description": "Audit and fix platform-specific code for macOS and Linux. macOS: NSVisualEffectView, Meta+Space shortcut, menubar handling. Linux: GTK transparency, X11/Wayland clipboard, tray icon DE compatibility.",
+      "exports": {
+        "rust": ["src-tauri/src/platform.rs"]
+      },
+      "imports": {
+        "rust": ["Cargo.toml (cocoa for macOS)", "lib.rs", "window.rs", "clipboard/monitor.rs", "settings.rs"],
+        "react": ["components/settings/SettingsPage.tsx"]
+      },
+      "dataModels": [
+        "Platform: 'windows' | 'macos' | 'linux'"
+      ],
+      "targetFiles": {
+        "create": ["src-tauri/src/platform.rs"],
+        "modify": [
+          "src-tauri/Cargo.toml (target-specific deps)",
+          "src-tauri/src/lib.rs (platform-conditional tray/menubar, shortcut defaults)",
+          "src-tauri/src/window.rs (macOS vibrancy, coordinate fixes)",
+          "src-tauri/src/clipboard/monitor.rs (arboard cross-platform)",
+          "src-tauri/src/settings.rs (platform-conditional defaults)",
+          "src-tauri/tauri.conf.json (platform-specific window configs)",
+          "src/components/settings/SettingsPage.tsx (Meta vs Alt display)"
+        ]
+      },
+      "dependencies": [1,2,3,4,5,6,7,8,9,12],
+      "buildOrder": 13
+    },
+    {
+      "id": 14,
+      "phase": "phase5",
+      "name": "Data Import/Export & Backup",
+      "description": "Full data portability: export all data as .dailybackup ZIP archive. Import with conflict resolution. Scheduled auto-backup. Factory reset with confirmation. Backup integrity verification via checksums.",
+      "exports": {
+        "rust": ["commands/backup_cmd.rs (export_backup, import_backup, verify_backup, factory_reset)"]
+      },
+      "imports": {
+        "rust": ["Cargo.toml (zip, sha2)", "db/notes.rs", "db/clipboard.rs", "settings.rs", "lib.rs"],
+        "react": ["bridge/ipc.ts", "stores/appStore.ts", "components/settings/SettingsPage.tsx"]
+      },
+      "dataModels": [
+        "BackupManifest { version: string; created_at: u64; checksum: string; contents: { notes_count: u32; clipboard_count: u32 } }",
+        "AppSettings extended: + backup_enabled: bool, + backup_dir: string, + backup_interval_days: u32"
+      ],
+      "targetFiles": {
+        "create": ["src-tauri/src/commands/backup_cmd.rs"],
+        "modify": [
+          "src-tauri/Cargo.toml (add zip, sha2)",
+          "src-tauri/src/commands/mod.rs",
+          "src-tauri/src/settings.rs (backup settings)",
+          "src-tauri/src/lib.rs (backup commands, scheduled backup task)",
+          "src-tauri/capabilities/default.json",
+          "src/types/index.ts",
+          "src/stores/appStore.ts (backup actions)",
+          "src/bridge/ipc.ts (backup IPC)",
+          "src/components/settings/SettingsPage.tsx (backup section, factory reset)"
+        ]
+      },
+      "dependencies": [1,2,3,4,5,6,10],
+      "buildOrder": 14
+    },
+    {
+      "id": 15,
+      "phase": "phase5",
+      "name": "Diagnostics & Error Reporting",
+      "description": "Diagnostics subsystem: log viewer panel (filterable by level), React error boundary with recovery UI, Rust panic hook with crash dumps, 'Report Issue' button that collects logs + system info into a pre-formatted GitHub issue.",
+      "exports": {
+        "rust": ["commands/diagnostics_cmd.rs (get_logs, get_system_info, create_issue_report)"],
+        "react": ["components/diagnostics/LogViewer.tsx", "components/diagnostics/ErrorBoundary.tsx"]
+      },
+      "imports": {
+        "rust": ["Cargo.toml (sysinfo)", "lib.rs"],
+        "react": ["stores/appStore.ts", "bridge/ipc.ts", "components/layout/Shell.tsx", "components/settings/SettingsPage.tsx", "src/main.tsx"]
+      },
+      "dataModels": [
+        "LogEntry { timestamp: u64; level: string; message: string; source: string }",
+        "SystemInfo { os: string; os_version: string; app_version: string; tauri_version: string; arch: string }",
+        "IssueReport { system_info: SystemInfo; logs: LogEntry[]; user_description: string }"
+      ],
+      "targetFiles": {
+        "create": [
+          "src-tauri/src/commands/diagnostics_cmd.rs",
+          "src/components/diagnostics/LogViewer.tsx",
+          "src/components/diagnostics/ErrorBoundary.tsx"
+        ],
+        "modify": [
+          "src-tauri/Cargo.toml (add sysinfo)",
+          "src-tauri/src/commands/mod.rs",
+          "src-tauri/src/lib.rs (diagnostics commands, panic hook)",
+          "src-tauri/src/main.rs (forward panic hook)",
+          "src/types/index.ts (LogEntry, SystemInfo, IssueReport)",
+          "src/stores/appStore.ts (diagnostics state)",
+          "src/bridge/ipc.ts (diagnostics IPC)",
+          "src/main.tsx (wrap App in ErrorBoundary)",
+          "src/components/layout/Shell.tsx (Logs tab)",
+          "src/components/settings/SettingsPage.tsx (Report Issue button)"
+        ]
+      },
+      "dependencies": [1,2,3,4,5,6,7,8,9,10,11,12],
+      "buildOrder": 15
+    }
+  ],
+  "buildOrderTopological": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+  "implementationGuidelines": {
+    "rust_backend": {
+      "migrate_to_sqlite": "The current JSON-file persistence (notes.json, settings.json) works for v0.1.0 but will not scale to clipboard (500+ entries) or tag queries. Migrate to SQLite (rusqlite + migrations) early — ideally Module 1. Keep settings.json as flat file for bootstrapping simplicity.",
+      "state_pattern": "Continue the existing `manage(...)` + `State<T>` pattern. Do not use global statics or lazy_static.",
+      "clipboard_threading": "Clipboard watcher on a dedicated std::thread, polling arboard at 500ms intervals. Cross-platform clipboard events are unreliable. Use Arc<AtomicBool> for graceful shutdown.",
+      "error_propagation": "Commands return Result<T, String>. For Module 10+, introduce thiserror enum. Avoid .unwrap() in production paths.",
+      "permissions": "Every new Tauri plugin (dialog, clipboard-manager, updater, fs) must be registered in capabilities/default.json. Missing permissions are the #1 silent-failure cause in production.",
+      "migration_path": "When moving notes to SQLite, do not delete the JSON path immediately. Add a startup migration that reads JSON → writes SQLite on first launch, then switches.",
+      "migrations": "Use a simple version table in SQLite. Each schema-extending module adds a migration function. Run all pending migrations at startup before any queries."
+    },
+    "react_frontend": {
+      "zustand_slices": "As the store grows, split into Zustand slices: notesStore.ts, clipboardStore.ts, searchStore.ts. Combine in appStore.ts. Avoid a single 500+ line store.",
+      "component_colocation": "Module components in their own directories. Share common primitives in components/ui/ (Button, Input, Modal, Tooltip, Spinner).",
+      "virtual_lists": "Clipboard history can reach 500+ entries. Use @tanstack/react-virtual for lists. Do not render hundreds of DOM nodes.",
+      "keyboard_navigation": "Every list (notes, clipboard, search) must support Arrow Up/Down, Enter, Escape. Use a reusable useListNavigation hook. Non-negotiable for a power-user tool.",
+      "animation_performance": "Use CSS transform and opacity for animations (GPU-composited). Avoid animating height/width. Use FLIP technique for list reordering.",
+      "theme_system": "Extend CSS custom properties: --accent, --accent-hover, --border, --surface-elevated. ThemePicker writes to document.documentElement.style.setProperty at runtime.",
+      "i18n_constraints": "Use namespace scoping: t('notes:save'). Never concatenate translated strings — use {{variable}} interpolation. Keep locale JSON flat (max 2 levels)."
+    },
+    "pitfalls": {
+      "windows_acrylic_transitions": "CSS transitions on the transparent acrylic window can cause black flashes (DWM compositor bugs). Test all animations with acrylic enabled. Fall back to instant transitions if flickering is reproducible.",
+      "clipboard_images": "Store clipboard images as files on disk (not base64 in SQLite) to keep DB manageable. Use data_dir/images/. Generate thumbnails (max 200px). Clean up orphans on exit.",
+      "shortcut_conflicts": "Alt+Space is taken by PowerToys Run on many Windows machines. Provide clear UX to change the shortcut. Detect conflicts at runtime if possible.",
+      "tauri_v2_plugins": "Pin plugin versions in Cargo.toml (=2, not ^2). Test upgrades before bumping.",
+      "sqlite_concurrency": "SQLite WAL mode: concurrent reads, single writer. Clipboard monitor writes on every clipboard change. If user saves a note simultaneously → SQLITE_BUSY. Use retry loop with exponential backoff (3 retries: 50ms/250ms/1250ms) or a write queue.",
+      "macos_codesign": "macOS notarization requires Apple Developer account ($99/year). Hardened runtime entitlements for plugins (com.apple.security.cs.disable-library-validation). Make optional in docs."
+    },
+    "testing_strategy": {
+      "unit": "Vitest for stores and pure components. Test each Zustand action in isolation. Mock IPC at bridge layer. Rust: #[cfg(test)] for db, settings, clipboard hashing.",
+      "integration": "@testing-library/react for full component trees. NoteEditor → save → NoteList update cycle. Mock only the IPC bridge.",
+      "e2e": "WebDriverIO with Tauri WebDriver support. Critical paths: launch → create note → edit → search → delete. Clipboard tests need real system clipboard → mark @skipci, run locally only.",
+      "ci": "Test job in ci.yml PR workflow. E2E on ubuntu-latest (headless). Windows E2E is complex → self-hosted runner or skip initially."
+    },
+    "release_cadence": {
+      "v0.2.0": "Modules 1-4. 3-4 weeks. Biggest user-facing value add. Ship before clipboard.",
+      "v0.3.0": "Modules 5-6. 2-3 weeks. Clipboard is self-contained but the monitor thread is the riskiest piece.",
+      "v0.4.0": "Modules 7-9. 3-4 weeks. Ship search (7) first, then DnD (8), then polish (9). Can be patch versions.",
+      "v0.5.0": "Modules 10-12. 2-3 weeks. Testing and i18n are parallelizable. Code signing can trail by a patch if certs aren't ready.",
+      "v0.6.0": "Modules 13-15. 4-6 weeks. Cross-platform testing needs real hardware. Diagnostics ships last."
+    }
+  }
+}
