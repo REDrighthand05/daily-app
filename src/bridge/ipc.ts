@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { AppSettings, Note, Tag, ClipboardEntry } from "../types";
+import type { AppSettings, Note, Tag, ClipboardEntry, SearchResultItem } from "../types";
 
 export const getSettings = (): Promise<AppSettings> => invoke("get_settings");
 export const saveSettings = (settings: AppSettings): Promise<void> =>
@@ -38,6 +38,10 @@ export const deleteClipboardEntry = (id: string): Promise<void> => invoke("delet
 export const clearClipboardHistory = (): Promise<void> => invoke("clear_clipboard_history");
 export const starClipboardEntry = (id: string, starred: boolean): Promise<void> =>
   invoke("star_clipboard_entry", { id, starred });
+
+// Search
+export const globalSearch = (query: string): Promise<SearchResultItem[]> =>
+  invoke("global_search", { query });
 
 // Export
 export const writeFile = (path: string, content: string): Promise<void> =>

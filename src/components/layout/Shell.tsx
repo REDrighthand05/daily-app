@@ -4,6 +4,7 @@ import NoteEditor from "../notes/NoteEditor";
 import NoteSearch from "../notes/NoteSearch";
 import SettingsPage from "../settings/SettingsPage";
 import ClipboardList from "../clipboard/ClipboardList";
+import SearchOverlay from "../search/SearchOverlay";
 import { useAppStore } from "../../stores/appStore";
 import { useEffect } from "react";
 import { listen } from "@tauri-apps/api/event";
@@ -22,8 +23,22 @@ export default function Shell() {
     };
   }, []);
 
+    useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+      if (e.key === "/" || ((e.ctrlKey || e.metaKey) && e.key === "f")) {
+        e.preventDefault();
+        openGlobalSearch();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
   return (
     <div className="app-container">
+      <SearchOverlay />
       <TitleBar />
       {activeTab === "notes" && (
         <div className="notes-panel">

@@ -4,3 +4,4 @@ pub mod tags_cmd;
 pub mod markdown_cmd;
 pub mod export_cmd;
 pub mod clipboard_cmd;
+pub mod search_cmd;

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { AppSettings, Note, Tab, Tag, EditorMode, ClipboardEntry } from "../types";
+import type { AppSettings, Note, Tab, Tag, EditorMode, ClipboardEntry, SearchResultItem } from "../types";
 import * as ipc from "../bridge/ipc";
 
 interface AppState {
@@ -14,6 +14,9 @@ interface AppState {
   showArchived: boolean;
   showDeleted: boolean;
   clipboardSearchQuery: string;
+  globalSearchOpen: boolean;
+  globalSearchQuery: string;
+  globalSearchResults: SearchResultItem[];
   loaded: boolean;
 
   loadAll: () => Promise<void>;
@@ -44,6 +47,10 @@ interface AppState {
   clearClipboardHistory: () => Promise<void>;
   starClipboardEntry: (id: string, starred: boolean) => Promise<void>;
   setClipboardSearchQuery: (q: string) => void;
+  openGlobalSearch: () => void;
+  closeGlobalSearch: () => void;
+  setGlobalSearchQuery: (q: string) => void;
+  setGlobalSearchResults: (results: SearchResultItem[]) => void;
 }
 
 const defaults: AppSettings = {
@@ -69,6 +76,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   showArchived: false,
   showDeleted: false,
   clipboardSearchQuery: "",
+  globalSearchOpen: false,
+  globalSearchQuery: "",
+  globalSearchResults: [],
   loaded: false,
 
   loadAll: async () => {
@@ -197,4 +207,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   setClipboardSearchQuery: (q) => set({ clipboardSearchQuery: q }),
+  openGlobalSearch: () => set({ globalSearchOpen: true, globalSearchQuery: "", globalSearchResults: [] }),
+  closeGlobalSearch: () => set({ globalSearchOpen: false, globalSearchQuery: "", globalSearchResults: [] }),
+  setGlobalSearchQuery: (q) => set({ globalSearchQuery: q }),
+  setGlobalSearchResults: (results) => set({ globalSearchResults: results }),
 }));

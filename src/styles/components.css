@@ -301,7 +301,7 @@
   cursor: default;
 }
 
-/* 閳光偓閳光偓 Tag Components 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Tag Components 闁冲厜鍋撻柍鍏夊亾 */
 
 .tag-chip {
   display: inline-flex;
@@ -408,7 +408,7 @@
 }
 .cat-filter-item:hover:not(.active) { background: var(--hover-bg); }
 .cat-filter-clear { vertical-align: middle; }
-/* 閳光偓閳光偓 Editor Toolbar 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Editor Toolbar 闁冲厜鍋撻柍鍏夊亾 */
 
 .editor-toolbar {
   display: flex;
@@ -475,7 +475,7 @@
   border-right: 1px solid var(--border);
 }
 
-/* 閳光偓閳光偓 Markdown Preview 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Markdown Preview 闁冲厜鍋撻柍鍏夊亾 */
 
 .markdown-preview {
   flex: 1;
@@ -529,7 +529,7 @@
 .markdown-preview img { max-width: 100%; border-radius: 4px; }
 .markdown-preview a { color: var(--accent); }
 
-/* 鈹€鈹€ Archive Toggle 鈹€鈹€ */
+/* 閳光偓閳光偓 Archive Toggle 閳光偓閳光偓 */
 
 .archive-toggle {
   display: flex;
@@ -556,7 +556,7 @@
   border-bottom-color: var(--accent);
 }
 
-/* 鈹€鈹€ Trash Bin 鈹€鈹€ */
+/* 閳光偓閳光偓 Trash Bin 閳光偓閳光偓 */
 
 .trash-empty {
   padding: 20px;
@@ -607,7 +607,7 @@
 }
 .trash-item-actions button:hover { background: var(--hover-bg); color: var(--text); }
 
-/* 鈹€鈹€ Note Item Actions 鈹€鈹€ */
+/* 閳光偓閳光偓 Note Item Actions 閳光偓閳光偓 */
 
 .note-item-actions {
   display: flex;
@@ -624,7 +624,7 @@
 }
 .note-item-action-btn:hover { background: var(--hover-bg); color: var(--text); }
 .note-item.archived { opacity: 0.6; }
-/* ── Tab Bar ── */
+/* 鈹€鈹€ Tab Bar 鈹€鈹€ */
 
 .tab-bar {
   display: flex;
@@ -666,7 +666,7 @@
   overflow: hidden;
 }
 
-/* ── Clipboard Panel ── */
+/* 鈹€鈹€ Clipboard Panel 鈹€鈹€ */
 
 .clipboard-panel {
   display: flex;
@@ -696,7 +696,7 @@
   overflow-y: auto;
 }
 
-/* ── Clipboard Search ── */
+/* 鈹€鈹€ Clipboard Search 鈹€鈹€ */
 
 .cb-search {
   display: flex;
@@ -718,7 +718,7 @@
   padding: 2px; display: flex;
 }
 
-/* ── Clipboard Entry ── */
+/* 鈹€鈹€ Clipboard Entry 鈹€鈹€ */
 
 .cb-entry {
   padding: 6px 8px;
@@ -754,7 +754,7 @@
   margin-top: 2px;
 }
 
-/* ── Clipboard Action Buttons ── */
+/* 鈹€鈹€ Clipboard Action Buttons 鈹€鈹€ */
 
 .cb-action-btn {
   background: none; border: none;
@@ -765,7 +765,7 @@
 .cb-action-btn:hover { background: var(--hover-bg); color: var(--text); }
 .cb-action-btn.starred { color: #f1c40f; }
 
-/* ── Clipboard Detail ── */
+/* 鈹€鈹€ Clipboard Detail 鈹€鈹€ */
 
 .cb-detail {
   display: flex;
@@ -804,4 +804,88 @@
   font-size: 10px;
   color: var(--text-secondary);
   border-top: 1px solid var(--border);
+}
+/* ── Search Overlay ── */
+
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  padding-top: 60px;
+}
+.search-overlay-panel {
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  background: var(--surface-elevated, var(--surface));
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.search-overlay-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.search-overlay-icon { color: var(--text-secondary); flex-shrink: 0; }
+.search-overlay-input {
+  flex: 1;
+  border: none; background: none;
+  font-size: 14px; outline: none;
+  color: var(--text);
+}
+.search-overlay-close {
+  background: none; border: none;
+  cursor: pointer; color: var(--text-secondary);
+  padding: 4px; display: flex; border-radius: 4px;
+}
+.search-overlay-close:hover { background: var(--hover-bg); color: var(--text); }
+.search-overlay-results {
+  overflow-y: auto;
+  max-height: 60vh;
+  padding: 4px 0;
+}
+.search-group { padding: 4px 0; }
+.search-group-title {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; font-size: 11px;
+  color: var(--text-secondary); text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.search-result-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+.search-result-item.selected { background: var(--hover-bg); border-left-color: var(--accent); }
+.search-result-item:hover { background: var(--hover-bg); }
+.search-result-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.search-result-snippet {
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.search-no-results {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 13px;
 }

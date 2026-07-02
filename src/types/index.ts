@@ -40,4 +40,20 @@ export type EditorMode = "edit" | "preview" | "split";
 
 export type Tab = "notes" | "settings" | "clipboard";
 
+export interface SearchResultItem {
+  id: string;
+  source: "note" | "clipboard";
+  title: string;
+  snippet: string;
+  timestamp: number;
+}
+
+export type ExportFormat = "markdown" | "text";|export interface SearchResultItem {
+  id: string;
+  source: "note" | "clipboard";
+  title: string;
+  snippet: string;
+  timestamp: number;
+}
+
 export type ExportFormat = "markdown" | "text";
