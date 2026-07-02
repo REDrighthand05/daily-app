@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
 use std::sync::Mutex;
+use crate::platform;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppSettings {
@@ -37,7 +38,7 @@ fn default_theme() -> String { "system".into() }
 fn default_panel_position() -> String { "right".into() }
 fn default_opacity() -> f64 { 0.85 }
 fn default_autostart() -> bool { false }
-fn default_shortcut() -> String { "Alt+Space".into() }
+fn default_shortcut() -> String { platform::platform_default_shortcut().into() }
 fn default_width() -> u32 { 360 }
 fn default_height() -> u32 { 720 }
 fn default_archive_days() -> u32 { 30 }

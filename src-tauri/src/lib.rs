@@ -10,6 +10,7 @@ mod settings;
 mod db;
 mod commands;
 
+mod platform;
 mod window;
 
 use settings::SettingsStore;
