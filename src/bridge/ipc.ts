@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { AppSettings, Note, Tag, ClipboardEntry, SearchResultItem } from "../types";
+import type { AppSettings, Note, Tag, ClipboardEntry, SearchResultItem, SystemInfo } from "../types";
 
 export const getSettings = (): Promise<AppSettings> => invoke("get_settings");
 export const saveSettings = (settings: AppSettings): Promise<void> =>
@@ -54,6 +54,11 @@ export const writeFile = (path: string, content: string): Promise<void> =>
   invoke("write_file", { path, content });
 export const batchExport = (baseDir: string, notes: Note[], format: string): Promise<void> =>
   invoke("batch_export", { baseDir, notes, format });
+
+// Diagnostics
+export const getSystemInfo = (): Promise<SystemInfo> => invoke("get_system_info");
+export const createIssueReport = (info: SystemInfo, description: string): Promise<string> =>
+  invoke("create_issue_report", { info, description });
 
 // Backup
 export const exportBackup = (path: string): Promise<void> =>

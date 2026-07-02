@@ -51,12 +51,11 @@ export interface SearchResultItem {
   timestamp: number;
 }
 
-export interface SearchResultItem {
-  id: string;
-  source: "note" | "clipboard";
-  title: string;
-  snippet: string;
-  timestamp: number;
+export interface SystemInfo {
+  os: string;
+  os_version: string;
+  app_version: string;
+  arch: string;
 }
 
 export type ExportFormat = "markdown" | "text";

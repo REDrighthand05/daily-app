@@ -2,14 +2,19 @@ import { useAppStore } from "../../stores/appStore";
 import type { AppSettings } from "../../types";
 import { Sun, Moon, Monitor, Palette, AlignLeft, AlignRight } from "lucide-react";
 import ThemePicker from "../theme/ThemePicker";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import LanguagePicker from "./LanguagePicker";
-import { exportBackup, importBackup, factoryReset } from "../../bridge/ipc";
+import { exportBackup, importBackup, factoryReset, getSystemInfo, createIssueReport } from "../../bridge/ipc";
+import type { SystemInfo } from "../../types";
 import CollapsibleSection from "../layout/CollapsibleSection";
 
 export default function SettingsPage() {
   const { t } = useTranslation();
+  const [sysInfo, setSysInfo] = useState<SystemInfo | null>(null);
   const { settings, updateSettings, loadAll } = useAppStore();
+
+  useEffect(() => { getSystemInfo().then(setSysInfo).catch(() => {}); }, []);
 
   const themes: { value: AppSettings["theme"]; icon: React.ReactNode; label: string }[] = [
     { value: "light", icon: <Sun size={18} />, label: t("settings.light") },
@@ -28,6 +33,14 @@ export default function SettingsPage() {
     const p = await open({ filters: [{ name: "Backup", extensions: ["zip"] }] });
     if (p) { await importBackup(p); await loadAll(); }
   };
+  const handleReportIssue = async () => {
+    const d = prompt("Describe the issue:");
+    if (d && sysInfo) {
+      const p = await createIssueReport(sysInfo, d);
+      alert("Report saved to:\n" + p);
+    }
+  };
+
   const handleReset = async () => {
     if (confirm("Delete all data?")) { await factoryReset(); await loadAll(); }
   };
@@ -127,6 +140,15 @@ export default function SettingsPage() {
         />
       </section>
           <section>
+        <h3>Diagnostics</h3>
+        <div className="diagnostics-info">
+          <p>OS: {sysInfo?.os} ({sysInfo?.arch})</p>
+          <p>App: v{sysInfo?.app_version}</p>
+          <button className="settings-action-btn" onClick={handleReportIssue}>Report Issue</button>
+        </div>
+      </section>
+
+      <section>
         <h3>Data</h3>
         <div className="settings-actions">
           <button className="settings-action-btn" onClick={handleExport}>Export Backup</button>

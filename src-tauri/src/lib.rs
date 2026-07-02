@@ -17,7 +17,7 @@ use settings::SettingsStore;
 use db::notes::NotesStore;
 use db::clipboard::ClipboardStore;
 use db::tags::TagsStore;
-use commands::{settings_cmd, notes_cmd, tags_cmd, markdown_cmd, export_cmd, clipboard_cmd, search_cmd, backup_cmd};
+use commands::{settings_cmd, notes_cmd, tags_cmd, markdown_cmd, export_cmd, clipboard_cmd, search_cmd, backup_cmd, diagnostics_cmd};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -141,6 +141,8 @@ pub fn run() {
             backup_cmd::export_backup,
             backup_cmd::import_backup,
             backup_cmd::factory_reset,
+            diagnostics_cmd::get_system_info,
+            diagnostics_cmd::create_issue_report,
             notes_cmd::delete_note,
             tags_cmd::get_tags,
             tags_cmd::save_tag,
