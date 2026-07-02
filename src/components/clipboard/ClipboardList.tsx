@@ -14,7 +14,7 @@ export default function ClipboardList() {
     deleteClipboardEntry, clearClipboardHistory, starClipboardEntry,
   } = useAppStore();
   const [detailEntry, setDetailEntry] = useState<CEntry | null>(null);
-  const pollRef = useRef<ReturnType<typeof setInterval>>();
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     loadClipboardEntries();

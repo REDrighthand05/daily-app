@@ -11,7 +11,7 @@ export default function SearchOverlay() {
   } = useAppStore();
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedIdx, setSelectedIdx] = useState(0);
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!globalSearchOpen) return;

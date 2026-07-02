@@ -10,7 +10,7 @@ export default function ArchiveToggle() {
     <div className="archive-toggle">
       <button
         className={`archive-toggle-btn ${mode === "active" ? "active" : ""}`}
-        onClick={() => setShowDeleted(false) || setShowArchived(false)}
+        onClick={() => { setShowDeleted(false); setShowArchived(false); }}
         title="Active notes"
       >
         <FileText size={12} /> Active

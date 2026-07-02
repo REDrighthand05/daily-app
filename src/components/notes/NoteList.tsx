@@ -1,6 +1,6 @@
 import { useAppStore } from "../../stores/appStore";
 import type { Note } from "../../types";
-import { Plus, Pin, Trash2, Archive, RotateCcw, ChevronUp, ChevronDown } from "lucide-react";
+import { Plus, Pin, Trash2, Archive, ChevronUp, ChevronDown } from "lucide-react";
 import CategoryFilter from "../tags/CategoryFilter";
 import ArchiveToggle from "./ArchiveToggle";
 import TrashBin from "./TrashBin";
@@ -14,7 +14,7 @@ export default function NoteList() {
     moveNote,
     notes, searchQuery, selectedTagId,
     showArchived, showDeleted,
-    saveNote, deleteNote, archiveNote, restoreArchive, softDeleteNote, restoreNote
+    saveNote, archiveNote, restoreArchive, softDeleteNote
   } = useAppStore();
 
   // If trash view is active, show TrashBin instead
@@ -88,9 +88,7 @@ export default function NoteList() {
             onDelete={softDeleteNote}
             onMove={moveNote}
             onArchive={showArchived ? restoreArchive : archiveNote}
-            onRestore={restoreNote}
-            onHardDelete={deleteNote}
-          />
+                      />
         ))}
       </div>
     </div>
@@ -98,15 +96,14 @@ export default function NoteList() {
 }
 
 function NoteListItem({
-  note, showArchived, onSave, onDelete, onMove, onArchive, onRestore, onHardDelete,
+  note, showArchived, onSave, onDelete, onMove, onArchive,
 }: {
   note: Note;
   showArchived: boolean;
   onSave: (n: Note) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
   onArchive: (id: string) => Promise<void>;
-  onRestore: (id: string) => Promise<void>;
-  onHardDelete: (id: string) => Promise<void>;
+  
   onMove: (id: string, dir: string) => Promise<void>;
 }) {
   const togglePin = () => onSave({ ...note, pinned: !note.pinned });

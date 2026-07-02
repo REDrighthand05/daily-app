@@ -11,7 +11,7 @@ import { listen } from "@tauri-apps/api/event";
 import { FileText, Clipboard, Settings } from "lucide-react";
 
 export default function Shell() {
-  const { activeTab, loadAll, setActiveTab } = useAppStore();
+  const { activeTab, loadAll, setActiveTab, openGlobalSearch } = useAppStore();
 
   useEffect(() => {
     loadAll();

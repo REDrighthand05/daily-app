@@ -50,7 +50,7 @@ export interface SearchResultItem {
   timestamp: number;
 }
 
-export type ExportFormat = "markdown" | "text";|export interface SearchResultItem {
+export interface SearchResultItem {
   id: string;
   source: "note" | "clipboard";
   title: string;
