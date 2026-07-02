@@ -26,6 +26,10 @@
         "windowEffects": {
           "effects": ["acrylic"],
           "state": "active"
+        },
+        "windowEffects": {
+          "effects": ["acrylic"],
+          "state": "active"
         }
       }
     ],

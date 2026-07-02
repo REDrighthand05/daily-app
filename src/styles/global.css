@@ -1,5 +1,7 @@
 ﻿:root {
   --window-alpha: 1;
+  --bg-base-alpha: 0.45;
+  --bg-primary: rgba(255, 255, 255, calc(var(--bg-base-alpha) * var(--window-alpha, 1)));
   --bg-primary: rgba(255, 255, 255, 0.45);
   --bg-secondary: rgba(255, 255, 255, 0.25);
   --bg-hover: rgba(0, 0, 0, 0.04);
@@ -21,6 +23,8 @@
 
 [data-theme="dark"] {
   --window-alpha: 1;
+  --bg-base-alpha: 0.65;
+  --bg-primary: rgba(30, 30, 30, calc(var(--bg-base-alpha) * var(--window-alpha, 1)));
   --bg-primary: rgba(30, 30, 30, 0.65);
   --bg-secondary: rgba(50, 50, 50, 0.35);
   --bg-hover: rgba(255, 255, 255, 0.06);
@@ -67,7 +71,7 @@ body {
   height: 100%;
   background: var(--bg-primary);
   border-left: 1px solid var(--border);
-  opacity: var(--window-alpha, 1);
+
 }
 
 input, textarea {
