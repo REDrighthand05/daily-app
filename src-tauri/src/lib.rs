@@ -123,6 +123,7 @@ pub fn run() {
             tags_cmd::save_tag,
             tags_cmd::delete_tag,
             tags_cmd::filter_notes_by_tag,
+            markdown_cmd::render_markdown,
             window::set_window_opacity,
             window::set_window_position,
             window::detach_window,

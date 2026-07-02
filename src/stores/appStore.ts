@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { AppSettings, Note, Tab, Tag } from "../types";
+import type { AppSettings, Note, Tab, Tag, EditorMode } from "../types";
 import * as ipc from "../bridge/ipc";
 
 interface AppState {
@@ -9,6 +9,7 @@ interface AppState {
   activeTab: Tab;
   searchQuery: string;
   selectedTagId: string | null;
+  editorMode: EditorMode;
   loaded: boolean;
 
   loadAll: () => Promise<void>;
@@ -19,11 +20,11 @@ interface AppState {
   setActiveTab: (tab: Tab) => void;
   setSearchQuery: (q: string) => void;
 
-  // Tags
   loadTags: () => Promise<void>;
   saveTag: (tag: Tag) => Promise<void>;
   deleteTag: (id: string) => Promise<void>;
   setSelectedTagId: (id: string | null) => void;
+  setEditorMode: (mode: EditorMode) => void;
 }
 
 const defaults: AppSettings = {
@@ -36,10 +37,6 @@ const defaults: AppSettings = {
   window_height: 720,
 };
 
-function generateId(): string {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-}
-
 export const useAppStore = create<AppState>((set, get) => ({
   settings: { ...defaults },
   notes: [],
@@ -47,6 +44,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   activeTab: "notes",
   searchQuery: "",
   selectedTagId: null,
+  editorMode: "edit",
   loaded: false,
 
   loadAll: async () => {
@@ -67,7 +65,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     const updated = { ...current, ...partial };
     await ipc.saveSettings(updated);
     set({ settings: updated });
-
     if (partial.opacity !== undefined) {
       ipc.setWindowOpacity(partial.opacity).catch(() => {});
     }
@@ -97,15 +94,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   setActiveTab: (tab) => set({ activeTab: tab }),
   setSearchQuery: (q) => set({ searchQuery: q }),
   setSelectedTagId: (id) => set({ selectedTagId: id }),
+  setEditorMode: (mode) => set({ editorMode: mode }),
 
-  // Tags
   loadTags: async () => {
-    try {
-      const tags = await ipc.getTags();
-      set({ tags });
-    } catch {
-      // ignore
-    }
+    try { set({ tags: await ipc.getTags() }); } catch {}
   },
 
   saveTag: async (tag) => {

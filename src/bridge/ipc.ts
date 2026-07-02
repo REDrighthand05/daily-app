@@ -11,6 +11,10 @@ export const saveNote = (note: Note): Promise<void> =>
 export const deleteNote = (id: string): Promise<void> =>
   invoke("delete_note", { id });
 
+// Markdown
+export const renderMarkdown = (content: string): Promise<string> =>
+  invoke("render_markdown", { content });
+
 // Tags
 export const getTags = (): Promise<Tag[]> => invoke("get_tags");
 export const saveTag = (tag: Tag): Promise<void> => invoke("save_tag", { tag });

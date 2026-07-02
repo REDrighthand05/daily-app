@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAppStore } from "../../stores/appStore";
 import type { Note } from "../../types";
 import TagChip from "../tags/TagChip";
 import TagPicker from "../tags/TagPicker";
+import EditorToolbar from "./EditorToolbar";
+import MarkdownPreview from "./MarkdownPreview";
 
 export default function NoteEditor() {
-  const { notes, tags, saveNote } = useAppStore();
+  const { notes, tags, editorMode, setEditorMode, saveNote } = useAppStore();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showTagPicker, setShowTagPicker] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const sorted = [...notes].sort((a, b) => b.updated_at - a.updated_at);
   const editingNote = editingId
@@ -29,11 +32,7 @@ export default function NoteEditor() {
   }
 
   const handleChange = (content: string) => {
-    const updated: Note = {
-      ...editingNote,
-      content,
-      updated_at: Date.now(),
-    };
+    const updated: Note = { ...editingNote, content, updated_at: Date.now() };
     saveNote(updated);
   };
 
@@ -45,34 +44,53 @@ export default function NoteEditor() {
     saveNote({ ...editingNote, tags: newTags, updated_at: Date.now() });
   };
 
+  const handleInsert = (before: string, after: string) => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const selected = editingNote.content.slice(start, end);
+    const newContent =
+      editingNote.content.slice(0, start) +
+      before + selected + after +
+      editingNote.content.slice(end);
+    const cursorPos = start + before.length + selected.length + after.length;
+    handleChange(newContent);
+    requestAnimationFrame(() => {
+      ta.focus();
+      ta.setSelectionRange(cursorPos, cursorPos);
+    });
+  };
+
   const noteTags = tags.filter((t) => editingNote.tags.includes(t.id));
 
   return (
     <div className="note-editor">
       <div className="note-editor-tags">
         {noteTags.map((tag) => (
-          <TagChip
-            key={tag.id}
-            tag={tag}
-            onRemove={() => handleTagToggle(tag.id)}
-          />
+          <TagChip key={tag.id} tag={tag} onRemove={() => handleTagToggle(tag.id)} />
         ))}
-        <button
-          className="tag-picker-toggle"
-          onClick={() => setShowTagPicker(!showTagPicker)}
-        >
+        <button className="tag-picker-toggle" onClick={() => setShowTagPicker(!showTagPicker)}>
           {showTagPicker ? "Done" : "+ Tags"}
         </button>
       </div>
-      {showTagPicker && (
-        <TagPicker selectedIds={editingNote.tags} onToggle={handleTagToggle} />
-      )}
-      <textarea
-        value={editingNote.content}
-        onChange={(e) => handleChange(e.target.value)}
-        placeholder="Start typing..."
-        autoFocus
-      />
+      {showTagPicker && <TagPicker selectedIds={editingNote.tags} onToggle={handleTagToggle} />}
+      <EditorToolbar mode={editorMode} onModeChange={setEditorMode} onInsert={handleInsert} />
+      <div className="note-editor-body">
+        {editorMode !== "preview" && (
+          <textarea
+            ref={textareaRef}
+            className={editorMode === "split" ? "split" : ""}
+            value={editingNote.content}
+            onChange={(e) => handleChange(e.target.value)}
+            placeholder="Start typing..."
+            autoFocus
+          />
+        )}
+        {editorMode !== "edit" && (
+          <MarkdownPreview content={editingNote.content} />
+        )}
+      </div>
     </div>
   );
 }

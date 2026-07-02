@@ -25,4 +25,8 @@ export interface Tag {
   color?: string;
 }
 
+export type EditorMode = "edit" | "preview" | "split";
+
+export type Tab = "notes" | "settings";|export type EditorMode = "edit" | "preview" | "split";
+
 export type Tab = "notes" | "settings";

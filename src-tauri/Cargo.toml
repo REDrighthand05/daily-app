@@ -1,4 +1,4 @@
-﻿[package]
+[package]
 name = "daily"
 version = "0.1.0"
 description = "A lightweight desktop side-panel utility"
@@ -24,3 +24,4 @@ tauri-plugin-autostart = "2"
 tauri-plugin-global-shortcut = "2"
 tauri-plugin-log = "2"
 dirs = "5"
+pulldown-cmark = "0.13"
