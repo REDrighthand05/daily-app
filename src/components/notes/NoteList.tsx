@@ -1,0 +1,88 @@
+import { useAppStore } from "../../stores/appStore";
+import type { Note } from "../../types";
+import { Plus, Pin, Trash2 } from "lucide-react";
+
+function generateId(): string {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+export default function NoteList() {
+  const { notes, searchQuery, saveNote, deleteNote } = useAppStore();
+
+  const filtered = searchQuery
+    ? notes.filter((n) =>
+        n.content.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : notes;
+
+  const sorted = [...filtered].sort((a, b) => {
+    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+    return b.updated_at - a.updated_at;
+  });
+
+  const handleNew = async () => {
+    const now = Date.now();
+    const note: Note = {
+      id: generateId(),
+      content: "",
+      created_at: now,
+      updated_at: now,
+      pinned: false,
+    };
+    await saveNote(note);
+  };
+
+  return (
+    <div className="note-list">
+      <div className="note-list-header">
+        <span className="note-count">{filtered.length} notes</span>
+        <button className="note-new-btn" onClick={handleNew} title="New note">
+          <Plus size={16} />
+        </button>
+      </div>
+      <div className="note-list-items">
+        {sorted.map((note) => (
+          <NoteListItem
+            key={note.id}
+            note={note}
+            onSave={saveNote}
+            onDelete={deleteNote}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function NoteListItem({
+  note,
+  onSave,
+  onDelete,
+}: {
+  note: Note;
+  onSave: (n: Note) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+}) {
+  const togglePin = () => onSave({ ...note, pinned: !note.pinned });
+  const line = note.content.split("\n")[0] || "";
+  const text = line.slice(0, 60) || "Empty note";
+
+  return (
+    <div className={`note-item ${note.pinned ? "pinned" : ""}`}>
+      <button className="note-item-main" onClick={togglePin}>
+        <Pin
+          size={12}
+          className={`pin-icon ${note.pinned ? "pinned" : ""}`}
+        />
+        <span className="note-item-preview">{text}</span>
+      </button>
+      <button
+        className="note-item-delete"
+        onClick={() => onDelete(note.id)}
+        title="Delete"
+      >
+        <Trash2 size={12} />
+      </button>
+    </div>
+  );
+}
