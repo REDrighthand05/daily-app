@@ -1,4 +1,4 @@
-/* Title Bar */
+﻿/* Title Bar */
 .title-bar {
   display: flex;
   align-items: center;
@@ -301,7 +301,7 @@
   cursor: default;
 }
 
-/* 闂佸啿鍘滈崑鎾绘煃閸忓浜?Tag Components 闂佸啿鍘滈崑鎾绘煃閸忓浜?*/
+/* 闂備礁鍟块崢婊堝磻閹剧粯鐓冮柛蹇擃槸娴?Tag Components 闂備礁鍟块崢婊堝磻閹剧粯鐓冮柛蹇擃槸娴?*/
 
 .tag-chip {
   display: inline-flex;
@@ -408,7 +408,7 @@
 }
 .cat-filter-item:hover:not(.active) { background: var(--hover-bg); }
 .cat-filter-clear { vertical-align: middle; }
-/* 闂佸啿鍘滈崑鎾绘煃閸忓浜?Editor Toolbar 闂佸啿鍘滈崑鎾绘煃閸忓浜?*/
+/* 闂備礁鍟块崢婊堝磻閹剧粯鐓冮柛蹇擃槸娴?Editor Toolbar 闂備礁鍟块崢婊堝磻閹剧粯鐓冮柛蹇擃槸娴?*/
 
 .editor-toolbar {
   display: flex;
@@ -475,7 +475,7 @@
   border-right: 1px solid var(--border);
 }
 
-/* 闂佸啿鍘滈崑鎾绘煃閸忓浜?Markdown Preview 闂佸啿鍘滈崑鎾绘煃閸忓浜?*/
+/* 闂備礁鍟块崢婊堝磻閹剧粯鐓冮柛蹇擃槸娴?Markdown Preview 闂備礁鍟块崢婊堝磻閹剧粯鐓冮柛蹇擃槸娴?*/
 
 .markdown-preview {
   flex: 1;
@@ -529,7 +529,7 @@
 .markdown-preview img { max-width: 100%; border-radius: 4px; }
 .markdown-preview a { color: var(--accent); }
 
-/* 闁冲厜鍋撻柍鍏夊亾 Archive Toggle 闁冲厜鍋撻柍鍏夊亾 */
+/* 闂佸啿鍘滈崑鎾绘煃閸忓浜?Archive Toggle 闂佸啿鍘滈崑鎾绘煃閸忓浜?*/
 
 .archive-toggle {
   display: flex;
@@ -556,7 +556,7 @@
   border-bottom-color: var(--accent);
 }
 
-/* 闁冲厜鍋撻柍鍏夊亾 Trash Bin 闁冲厜鍋撻柍鍏夊亾 */
+/* 闂佸啿鍘滈崑鎾绘煃閸忓浜?Trash Bin 闂佸啿鍘滈崑鎾绘煃閸忓浜?*/
 
 .trash-empty {
   padding: 20px;
@@ -607,7 +607,7 @@
 }
 .trash-item-actions button:hover { background: var(--hover-bg); color: var(--text); }
 
-/* 闁冲厜鍋撻柍鍏夊亾 Note Item Actions 闁冲厜鍋撻柍鍏夊亾 */
+/* 闂佸啿鍘滈崑鎾绘煃閸忓浜?Note Item Actions 闂佸啿鍘滈崑鎾绘煃閸忓浜?*/
 
 .note-item-actions {
   display: flex;
@@ -624,7 +624,7 @@
 }
 .note-item-action-btn:hover { background: var(--hover-bg); color: var(--text); }
 .note-item.archived { opacity: 0.6; }
-/* 閳光偓閳光偓 Tab Bar 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Tab Bar 闁冲厜鍋撻柍鍏夊亾 */
 
 .tab-bar {
   display: flex;
@@ -666,7 +666,7 @@
   overflow: hidden;
 }
 
-/* 閳光偓閳光偓 Clipboard Panel 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Clipboard Panel 闁冲厜鍋撻柍鍏夊亾 */
 
 .clipboard-panel {
   display: flex;
@@ -696,7 +696,7 @@
   overflow-y: auto;
 }
 
-/* 閳光偓閳光偓 Clipboard Search 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Clipboard Search 闁冲厜鍋撻柍鍏夊亾 */
 
 .cb-search {
   display: flex;
@@ -718,7 +718,7 @@
   padding: 2px; display: flex;
 }
 
-/* 閳光偓閳光偓 Clipboard Entry 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Clipboard Entry 闁冲厜鍋撻柍鍏夊亾 */
 
 .cb-entry {
   padding: 6px 8px;
@@ -754,7 +754,7 @@
   margin-top: 2px;
 }
 
-/* 閳光偓閳光偓 Clipboard Action Buttons 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Clipboard Action Buttons 闁冲厜鍋撻柍鍏夊亾 */
 
 .cb-action-btn {
   background: none; border: none;
@@ -765,7 +765,7 @@
 .cb-action-btn:hover { background: var(--hover-bg); color: var(--text); }
 .cb-action-btn.starred { color: #f1c40f; }
 
-/* 閳光偓閳光偓 Clipboard Detail 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Clipboard Detail 闁冲厜鍋撻柍鍏夊亾 */
 
 .cb-detail {
   display: flex;
@@ -805,7 +805,7 @@
   color: var(--text-secondary);
   border-top: 1px solid var(--border);
 }
-/* 鈹€鈹€ Search Overlay 鈹€鈹€ */
+/* 閳光偓閳光偓 Search Overlay 閳光偓閳光偓 */
 
 .search-overlay {
   position: fixed;
@@ -908,7 +908,7 @@
 }
 .note-item-move-btn:hover { color: var(--text); }
 
-/* ── Collapsible Section ── */
+/* 鈹€鈹€ Collapsible Section 鈹€鈹€ */
 
 .collapsible-section { border-bottom: 1px solid var(--border); }
 .collapsible-header {
@@ -923,7 +923,7 @@
 .collapsible-chevron.open { transform: rotate(180deg); }
 .collapsible-content { padding: 0 10px 10px; }
 
-/* ── Theme Picker ── */
+/* 鈹€鈹€ Theme Picker 鈹€鈹€ */
 
 .theme-picker { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
 .theme-picker-presets { display: flex; gap: 4px; }
@@ -942,3 +942,26 @@
   width: 24px; height: 24px; border: none;
   background: none; cursor: pointer; padding: 0;
 }
+/* App loading screen */
+.app-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background: var(--bg-primary);
+}
+
+.loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+

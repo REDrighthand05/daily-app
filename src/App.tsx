@@ -5,9 +5,13 @@ import "./styles/global.css";
 import "./styles/components.css";
 
 export default function App() {
-  const { settings, loaded } = useAppStore();
+  const { settings, loaded, loadAll } = useAppStore();
 
   useEffect(() => {
+    if (!loaded) {
+      loadAll();
+      return;
+    }
     if (loaded) {
       document.documentElement.setAttribute(
         "data-theme",
@@ -20,6 +24,11 @@ export default function App() {
     }
   }, [settings.theme, loaded]);
 
-  if (!loaded) return null;
+  if (!loaded)
+    return (
+      <div className="app-loading">
+        <div className="loading-spinner" />
+      </div>
+    );
   return <Shell />;
 }
