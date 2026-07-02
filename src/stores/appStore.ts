@@ -56,7 +56,7 @@ interface AppState {
 }
 
 const defaults: AppSettings = {
-  theme: "system",
+
   panel_position: "right",
   opacity: 0.85,
   autostart: false,
@@ -110,9 +110,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     await ipc.saveSettings(updated);
     set({ settings: updated });
     if (partial.opacity !== undefined) {
-      const currentTheme = get().settings.theme;
-      const isDark = currentTheme === 'dark' || (currentTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      ipc.setWindowOpacity(partial.opacity, isDark).catch(() => {});
+      ipc.setWindowOpacity(partial.opacity).catch(() => {});
       document.documentElement.style.setProperty('--window-alpha', String(partial.opacity));
     }
     if (partial.panel_position !== undefined) {

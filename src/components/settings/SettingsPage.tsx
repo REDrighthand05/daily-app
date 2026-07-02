@@ -1,6 +1,6 @@
-import { useAppStore } from "../../stores/appStore";
+﻿import { useAppStore } from "../../stores/appStore";
 import type { AppSettings } from "../../types";
-import { Sun, Moon, Monitor, Palette, AlignLeft, AlignRight } from "lucide-react";
+import { Palette, AlignLeft, AlignRight } from "lucide-react";
 import ThemePicker from "../theme/ThemePicker";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,13 +16,6 @@ export default function SettingsPage() {
 
   useEffect(() => { getSystemInfo().then(setSysInfo).catch(() => {}); }, []);
 
-  const themes: { value: AppSettings["theme"]; icon: React.ReactNode; label: string }[] = [
-    { value: "light", icon: <Sun size={18} />, label: t("settings.light") },
-    { value: "dark", icon: <Moon size={18} />, label: t("settings.dark") },
-    { value: "system", icon: <Monitor size={18} />, label: t("settings.system") },
-  ];
-
-  
   const handleExport = async () => {
     const { save } = await import("@tauri-apps/plugin-dialog");
     const p = await save({ filters: [{ name: "Backup", extensions: ["zip"] }], defaultPath: "daily-backup.zip" });
@@ -56,20 +49,6 @@ export default function SettingsPage() {
       <h2>Settings</h2>
 
       <CollapsibleSection title={t("settings.appearance")}>
-        <h3>{t("settings.theme")}</h3>
-        <div className="settings-options">
-          {themes.map((t) => (
-            <button
-              key={t.value}
-              className={`settings-option ${settings.theme === t.value ? "active" : ""}`}
-              onClick={() => updateSettings({ theme: t.value })}
-            >
-              {t.icon}
-              <span>{t.label}</span>
-            </button>
-          ))}
-        </div>
-
         <h3>{t("settings.accentColor")}</h3>
         <ThemePicker
           accentColor={settings.accent_color}
@@ -94,7 +73,7 @@ export default function SettingsPage() {
           {positions.map((p) => (
             <button
               key={p.value}
-              className={`settings-option ${settings.panel_position === p.value ? "active" : ""}`}
+              className={settings-option }
               onClick={() => updateSettings({ panel_position: p.value })}
             >
               {p.icon}

@@ -1,5 +1,4 @@
 ﻿export interface AppSettings {
-  theme: "dark" | "light" | "system";
   panel_position: "left" | "right" | "float";
   opacity: number;
   autostart: boolean;

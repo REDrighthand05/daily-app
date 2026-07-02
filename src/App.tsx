@@ -14,18 +14,9 @@ export default function App() {
       return;
     }
     if (loaded) {
-      const isDark = settings.theme === 'dark' || (settings.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      ipc.setWindowOpacity(settings.opacity, isDark).catch(() => {});
-      document.documentElement.setAttribute(
-        "data-theme",
-        settings.theme === "system"
-          ? window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light"
-          : settings.theme
-      );
+      ipc.setWindowOpacity(settings.opacity).catch(() => {});
     }
-  }, [settings.theme, loaded]);
+  }, [settings.opacity, loaded]);
 
   if (!loaded)
     return (

@@ -1,32 +1,8 @@
 ﻿:root {
   --window-alpha: 1;
-  --bg-base-alpha: 0.45;
-  --bg-primary: rgba(255, 255, 255, calc(var(--bg-base-alpha) * var(--window-alpha, 1)));
-  --bg-primary: rgba(255, 255, 255, 0.45);
-  --bg-secondary: rgba(255, 255, 255, 0.25);
-  --bg-hover: rgba(0, 0, 0, 0.04);
-  --bg-active: rgba(0, 0, 0, 0.08);
-  --text-primary: #1a1a1a;
-  --text-secondary: #666;
-  --text-muted: #999;
-  --border: rgba(0, 0, 0, 0.08);
-  --accent: #4f6ef7;
-  --accent-hover: #3d5bd9;
-  --danger: #e53e3e;
-  --shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 12px;
-  --spacing-lg: 16px;
-  --spacing-xl: 24px;
-}
-
-[data-theme="dark"] {
-  --window-alpha: 1;
-  --bg-base-alpha: 0.65;
-  --bg-primary: rgba(30, 30, 30, calc(var(--bg-base-alpha) * var(--window-alpha, 1)));
-  --bg-primary: rgba(30, 30, 30, 0.65);
-  --bg-secondary: rgba(50, 50, 50, 0.35);
+  --bg-base-alpha: 0.48;
+  --bg-primary: rgba(0, 0, 0, calc(0.48 * var(--window-alpha, 1)));
+  --bg-secondary: rgba(255, 255, 255, 0.08);
   --bg-hover: rgba(255, 255, 255, 0.06);
   --bg-active: rgba(255, 255, 255, 0.10);
   --text-primary: #e8e8e8;
@@ -35,7 +11,8 @@
   --border: rgba(255, 255, 255, 0.08);
   --accent: #6c8cff;
   --accent-hover: #8aa4ff;
-  --shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+  --danger: #ff6b6b;
+  --shadow: 0 2px 16px rgba(0, 0, 0, 0.15);
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 12px;

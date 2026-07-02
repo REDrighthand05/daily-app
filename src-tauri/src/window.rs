@@ -6,15 +6,10 @@ pub fn set_window_opacity(
     window: WebviewWindow,
     store: tauri::State<SettingsStore>,
     opacity: f64,
-    is_dark: bool,
 ) -> Result<(), String> {
     let clamped = opacity.clamp(0.3, 1.0);
     let alpha = (clamped * 255.0) as u8;
-    if is_dark {
-        let _ = window.set_background_color(Some((0, 0, 0, alpha).into()));
-    } else {
-        let _ = window.set_background_color(Some((255, 255, 255, alpha).into()));
-    }
+    let _ = window.set_background_color(Some((0, 0, 0, alpha).into()));
     {
         let mut settings = store.settings.lock().map_err(|e| e.to_string())?;
         settings.opacity = clamped;
