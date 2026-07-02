@@ -11,6 +11,12 @@ export const saveNote = (note: Note): Promise<void> =>
 export const deleteNote = (id: string): Promise<void> =>
   invoke("delete_note", { id });
 
+// Export
+export const writeFile = (path: string, content: string): Promise<void> =>
+  invoke("write_file", { path, content });
+export const batchExport = (baseDir: string, notes: Note[], format: string): Promise<void> =>
+  invoke("batch_export", { baseDir, notes, format });
+
 // Markdown
 export const renderMarkdown = (content: string): Promise<string> =>
   invoke("render_markdown", { content });

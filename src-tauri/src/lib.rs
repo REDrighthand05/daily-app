@@ -9,6 +9,7 @@ use std::str::FromStr;
 mod settings;
 mod db;
 mod commands;
+
 mod window;
 
 use settings::SettingsStore;
@@ -44,6 +45,7 @@ pub fn run() {
                 .level(log::LevelFilter::Info)
                 .build(),
         )
+        .plugin(tauri_plugin_dialog::init())
         .manage(settings_store)
         .manage(NotesStore::new())
         .manage(TagsStore::new())
@@ -124,6 +126,8 @@ pub fn run() {
             tags_cmd::delete_tag,
             tags_cmd::filter_notes_by_tag,
             markdown_cmd::render_markdown,
+            export_cmd::write_file,
+            export_cmd::batch_export,
             window::set_window_opacity,
             window::set_window_position,
             window::detach_window,

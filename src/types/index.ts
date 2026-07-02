@@ -25,8 +25,12 @@ export interface Tag {
   color?: string;
 }
 
+export type ExportFormat = "markdown" | "text";
+
 export type EditorMode = "edit" | "preview" | "split";
 
-export type Tab = "notes" | "settings";|export type EditorMode = "edit" | "preview" | "split";
+export type Tab = "notes" | "settings";|export type ExportFormat = "markdown" | "text";
+
+export type EditorMode = "edit" | "preview" | "split";
 
 export type Tab = "notes" | "settings";

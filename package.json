@@ -16,6 +16,7 @@
     "@tauri-apps/plugin-shell": "^2.3.5",
     "lucide-react": "^1.23.0",
     "highlight.js": "^11.11.0",
+    "@tauri-apps/plugin-dialog": "^2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "zustand": "^5.0.14"

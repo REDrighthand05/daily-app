@@ -4,6 +4,7 @@ import type { Note } from "../../types";
 import TagChip from "../tags/TagChip";
 import TagPicker from "../tags/TagPicker";
 import EditorToolbar from "./EditorToolbar";
+import ExportMenu from "./ExportMenu";
 import MarkdownPreview from "./MarkdownPreview";
 
 export default function NoteEditor() {
@@ -66,7 +67,8 @@ export default function NoteEditor() {
 
   return (
     <div className="note-editor">
-      <div className="note-editor-tags">
+      <div className="note-editor-header">
+        <ExportMenu note={editingNote} />
         {noteTags.map((tag) => (
           <TagChip key={tag.id} tag={tag} onRemove={() => handleTagToggle(tag.id)} />
         ))}
