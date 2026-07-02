@@ -69,7 +69,7 @@ export const factoryReset = (): Promise<void> =>
   invoke("factory_reset");
 
 // Window management
-export const setWindowOpacity = (opacity: number): Promise<void> =>
+export const setWindowOpacity = (opacity: number, isDark: boolean): Promise<void> =>
   invoke("set_window_opacity", { opacity, isDark });
 export const setWindowPosition = (position: string): Promise<void> =>
   invoke("set_window_position", { position });
