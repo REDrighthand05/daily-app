@@ -1,7 +1,9 @@
-﻿import { useAppStore } from "../../stores/appStore";
+import { useTranslation } from "react-i18next";
+import { useAppStore } from "../../stores/appStore";
 import { Search, X } from "lucide-react";
 
 export default function NoteSearch() {
+  const { t } = useTranslation();
   const { searchQuery, setSearchQuery } = useAppStore();
 
   return (
@@ -9,7 +11,7 @@ export default function NoteSearch() {
       <Search size={14} className="search-icon" />
       <input
         type="text"
-        placeholder="Search notes..."
+        placeholder={t("notes.search")}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />

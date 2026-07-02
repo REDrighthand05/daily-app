@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../stores/appStore";
 import type { Note } from "../../types";
 import { Plus, Pin, Trash2, Archive, ChevronUp, ChevronDown } from "lucide-react";
@@ -10,6 +11,7 @@ function generateId(): string {
 }
 
 export default function NoteList() {
+  const { t } = useTranslation();
   const {
     moveNote,
     notes, searchQuery, selectedTagId,
@@ -72,8 +74,8 @@ export default function NoteList() {
     <div className="note-list">
       <ArchiveToggle />
       <div className="note-list-header">
-        <span className="note-count">{filtered.length} {showArchived ? "archived" : "notes"}</span>
-        <button className="note-new-btn" onClick={handleNew} title="New note">
+        <span className="note-count">{showArchived ? t("notes.archivedCount", { count: filtered.length }) : t("notes.count", { count: filtered.length })}</span>
+        <button className="note-new-btn" onClick={handleNew} title={t("notes.newNote")}>
           <Plus size={16} />
         </button>
       </div>
@@ -106,9 +108,10 @@ function NoteListItem({
   
   onMove: (id: string, dir: string) => Promise<void>;
 }) {
+  const { t } = useTranslation();
   const togglePin = () => onSave({ ...note, pinned: !note.pinned });
   const line = note.content.split("\n")[0] || "";
-  const text = line.slice(0, 60) || "Empty note";
+  const text = line.slice(0, 60) || t("notes.empty");
 
   return (
     <div className={`note-item ${note.pinned ? "pinned" : ""} ${note.archived ? "archived" : ""}`}>

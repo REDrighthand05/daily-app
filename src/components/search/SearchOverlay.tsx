@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../stores/appStore";
 import { globalSearch } from "../../bridge/ipc";
 import type { SearchResultItem } from "../../types";
 import { Search, FileText, Clipboard, X } from "lucide-react";
 
 export default function SearchOverlay() {
+  const { t } = useTranslation();
   const {
     globalSearchOpen, globalSearchQuery, globalSearchResults,
     closeGlobalSearch, setGlobalSearchQuery, setGlobalSearchResults, setActiveTab,
@@ -71,7 +73,7 @@ export default function SearchOverlay() {
             className="search-overlay-input"
             value={globalSearchQuery}
             onChange={(e) => doSearch(e.target.value)}
-            placeholder="Search notes and clipboard..."
+            placeholder={t("search.placeholder")}
           />
           <button className="search-overlay-close" onClick={closeGlobalSearch}>
             <X size={16} />
@@ -81,7 +83,7 @@ export default function SearchOverlay() {
           {noteResults.length > 0 && (
             <div className="search-group">
               <div className="search-group-title">
-                <FileText size={12} /> Notes ({noteResults.length})
+                <FileText size={12} /> {t("search.notes", { count: noteResults.length })}
               </div>
               {noteResults.map((r, i) => (
                 <div
@@ -98,7 +100,7 @@ export default function SearchOverlay() {
           {clipResults.length > 0 && (
             <div className="search-group">
               <div className="search-group-title">
-                <Clipboard size={12} /> Clipboard ({clipResults.length})
+                <Clipboard size={12} /> {t("search.clipboard", { count: clipResults.length })}
               </div>
               {clipResults.map((r, i) => (
                 <div
@@ -113,7 +115,7 @@ export default function SearchOverlay() {
             </div>
           )}
           {globalSearchQuery.length >= 2 && globalSearchResults.length === 0 && (
-            <div className="search-no-results">No results found</div>
+            <div className="search-no-results">{t("search.noResults")}</div>
           )}
         </div>
       </div>

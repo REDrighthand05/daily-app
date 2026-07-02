@@ -4,6 +4,7 @@ import NoteEditor from "../notes/NoteEditor";
 import NoteSearch from "../notes/NoteSearch";
 import SettingsPage from "../settings/SettingsPage";
 import ClipboardList from "../clipboard/ClipboardList";
+import { useTranslation } from "react-i18next";
 import SearchOverlay from "../search/SearchOverlay";
 import { useAppStore } from "../../stores/appStore";
 import { useEffect } from "react";
@@ -11,6 +12,7 @@ import { listen } from "@tauri-apps/api/event";
 import { FileText, Clipboard, Settings } from "lucide-react";
 
 export default function Shell() {
+  const { t } = useTranslation();
   const { activeTab, loadAll, setActiveTab } = useAppStore();
 
   useEffect(() => {
@@ -58,19 +60,19 @@ export default function Shell() {
           className={`tab-bar-btn ${activeTab === "notes" ? "active" : ""}`}
           onClick={() => setActiveTab("notes")}
         >
-          <FileText size={14} /> Notes
+          <FileText size={14} /> {t("tabs.notes")}
         </button>
         <button
           className={`tab-bar-btn ${activeTab === "clipboard" ? "active" : ""}`}
           onClick={() => setActiveTab("clipboard")}
         >
-          <Clipboard size={14} /> Clipboard
+          <Clipboard size={14} /> {t("tabs.clipboard")}
         </button>
         <button
           className={`tab-bar-btn ${activeTab === "settings" ? "active" : ""}`}
           onClick={() => setActiveTab("settings")}
         >
-          <Settings size={14} /> Settings
+          <Settings size={14} /> {t("tabs.settings")}
         </button>
       </div>
     </div>

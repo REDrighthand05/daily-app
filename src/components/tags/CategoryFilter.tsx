@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../stores/appStore";
 import { X } from "lucide-react";
 
 export default function CategoryFilter() {
+  const { t } = useTranslation();
   const { tags, notes, selectedTagId, setSelectedTagId } = useAppStore();
 
   const tagCounts = new Map<string, number>();
@@ -15,7 +17,7 @@ export default function CategoryFilter() {
         className={`cat-filter-item ${!selectedTagId ? "active" : ""}`}
         onClick={() => setSelectedTagId(null)}
       >
-        All ({notes.length})
+        {t("notes.all")} ({notes.length})
       </button>
       {tags
         .filter((t) => (tagCounts.get(t.id) || 0) > 0)

@@ -30,6 +30,8 @@
     "trash": "回收站",
     "archived": "已归档",
     "active": "活跃",
+    "all": "全部",
+    "done": "完成",
     "count": "{count} 条笔记",
     "archivedCount": "{count} 条归档",
     "trashEmpty": "回收站为空",

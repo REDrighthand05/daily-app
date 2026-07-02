@@ -2,30 +2,32 @@ import { useAppStore } from "../../stores/appStore";
 import type { AppSettings } from "../../types";
 import { Sun, Moon, Monitor, Palette, AlignLeft, AlignRight } from "lucide-react";
 import ThemePicker from "../theme/ThemePicker";
+import { useTranslation } from "react-i18next";
 import LanguagePicker from "./LanguagePicker";
 import CollapsibleSection from "../layout/CollapsibleSection";
 
 export default function SettingsPage() {
+  const { t } = useTranslation();
   const { settings, updateSettings } = useAppStore();
 
   const themes: { value: AppSettings["theme"]; icon: React.ReactNode; label: string }[] = [
-    { value: "light", icon: <Sun size={18} />, label: "Light" },
-    { value: "dark", icon: <Moon size={18} />, label: "Dark" },
-    { value: "system", icon: <Monitor size={18} />, label: "System" },
+    { value: "light", icon: <Sun size={18} />, label: t("settings.light") },
+    { value: "dark", icon: <Moon size={18} />, label: t("settings.dark") },
+    { value: "system", icon: <Monitor size={18} />, label: t("settings.system") },
   ];
 
   const positions: { value: AppSettings["panel_position"]; icon: React.ReactNode; label: string }[] = [
-    { value: "left", icon: <AlignLeft size={18} />, label: "Left" },
-    { value: "right", icon: <AlignRight size={18} />, label: "Right" },
-    { value: "float", icon: <Palette size={18} />, label: "Float" },
+    { value: "left", icon: <AlignLeft size={18} />, label: t("settings.left") },
+    { value: "right", icon: <AlignRight size={18} />, label: t("settings.right") },
+    { value: "float", icon: <Palette size={18} />, label: t("settings.float") },
   ];
 
   return (
     <div className="settings-page">
       <h2>Settings</h2>
 
-      <CollapsibleSection title="Appearance">
-        <h3>Theme</h3>
+      <CollapsibleSection title={t("settings.appearance")}>
+        <h3>{t("settings.theme")}</h3>
         <div className="settings-options">
           {themes.map((t) => (
             <button
@@ -39,7 +41,7 @@ export default function SettingsPage() {
           ))}
         </div>
 
-        <h3>Accent Color</h3>
+        <h3>{t("settings.accentColor")}</h3>
         <ThemePicker
           accentColor={settings.accent_color}
           onChange={(color) => updateSettings({ accent_color: color })}
@@ -51,14 +53,14 @@ export default function SettingsPage() {
             checked={settings.animations_enabled}
             onChange={(e) => updateSettings({ animations_enabled: e.target.checked })}
           />
-          <span>Enable animations</span>
+          <span>{t("settings.animations")}</span>
         </label>
-        <h3>Language</h3>
+        <h3>{t("settings.language")}</h3>
         <LanguagePicker />
       </CollapsibleSection>
 
-      <CollapsibleSection title="Panel">
-        <h3>Panel Position</h3>
+      <CollapsibleSection title={t("settings.panel")}>
+        <h3>{t("settings.position")}</h3>
         <div className="settings-options">
           {positions.map((p) => (
             <button
@@ -71,7 +73,7 @@ export default function SettingsPage() {
             </button>
           ))}
         </div>
-        <h3>Opacity</h3>
+        <h3>{t("settings.opacity")}</h3>
         <div className="settings-slider">
           <input
             type="range"
@@ -87,19 +89,19 @@ export default function SettingsPage() {
       </CollapsibleSection>
 
       <section>
-        <h3>Autostart</h3>
+        <h3>{t("settings.autostart")}</h3>
         <label className="settings-toggle">
           <input
             type="checkbox"
             checked={settings.autostart}
             onChange={(e) => updateSettings({ autostart: e.target.checked })}
           />
-          <span>Start with Windows</span>
+          <span>{t("settings.startWithWindows")}</span>
         </label>
       </section>
 
       <section>
-        <h3>Shortcut</h3>
+        <h3>{t("settings.shortcut")}</h3>
         <input
           className="settings-shortcut"
           type="text"

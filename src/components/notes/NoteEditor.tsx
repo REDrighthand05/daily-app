@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../stores/appStore";
 import type { Note } from "../../types";
 import TagChip from "../tags/TagChip";
@@ -8,6 +9,7 @@ import ExportMenu from "./ExportMenu";
 import MarkdownPreview from "./MarkdownPreview";
 
 export default function NoteEditor() {
+  const { t } = useTranslation();
   const { notes, tags, editorMode, setEditorMode, saveNote } = useAppStore();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showTagPicker, setShowTagPicker] = useState(false);
@@ -27,7 +29,7 @@ export default function NoteEditor() {
   if (!editingNote) {
     return (
       <div className="note-editor-empty">
-        <p>Select a note or create a new one</p>
+        <p>{t("notes.selectNote")}</p>
       </div>
     );
   }
@@ -73,7 +75,7 @@ export default function NoteEditor() {
           <TagChip key={tag.id} tag={tag} onRemove={() => handleTagToggle(tag.id)} />
         ))}
         <button className="tag-picker-toggle" onClick={() => setShowTagPicker(!showTagPicker)}>
-          {showTagPicker ? "Done" : "+ Tags"}
+          {showTagPicker ? t("common.done") : t("tags.addTags")}
         </button>
       </div>
       {showTagPicker && <TagPicker onToggle={handleTagToggle} />}
@@ -85,7 +87,7 @@ export default function NoteEditor() {
             className={editorMode === "split" ? "split" : ""}
             value={editingNote.content}
             onChange={(e) => handleChange(e.target.value)}
-            placeholder="Start typing..."
+            placeholder={t("notes.startTyping")}
             autoFocus
           />
         )}

@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppStore } from "../../stores/appStore";
 import type { ClipboardEntry as CEntry } from "../../types";
 import ClipboardEntryComponent from "./ClipboardEntry";
@@ -8,6 +9,7 @@ import { Trash2 } from "lucide-react";
 import { clipboardPoll } from "../../bridge/ipc";
 
 export default function ClipboardList() {
+  const { t } = useTranslation();
   const {
     clipboardEntries, clipboardSearchQuery,
     loadClipboardEntries, addClipboardEntry,
@@ -47,10 +49,10 @@ export default function ClipboardList() {
   return (
     <div className="clipboard-panel">
       <div className="clipboard-header">
-        <span className="clipboard-count">{filtered.length} entries</span>
+        <span className="clipboard-count">{filtered.length}</span>
         <button
           className="clipboard-clear-btn"
-          onClick={() => { if (confirm("Clear clipboard history?")) clearClipboardHistory(); }}
+          onClick={() => { if (confirm(t("clipboard.clearConfirm"))) clearClipboardHistory(); }}
           title="Clear history"
         >
           <Trash2 size={12} /> Clear
