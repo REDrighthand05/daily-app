@@ -1,4 +1,5 @@
-﻿import { useAppStore } from "../../stores/appStore";
+﻿import { useTranslation } from "react-i18next";
+import { useAppStore } from "../../stores/appStore";
 import { Settings, StickyNote } from "lucide-react";
 import type { Tab } from "../../types";
 
@@ -32,3 +33,4 @@ export default function TitleBar() {
     </div>
   );
 }
+

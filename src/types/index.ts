@@ -9,6 +9,8 @@
   archive_days: number;
   accent_color: string;
   animations_enabled: boolean;
+  clipboard_enabled: boolean;
+  clipboard_max_entries: number;
   language: string;
 }
 
@@ -59,4 +61,5 @@ export interface SystemInfo {
 }
 
 export type ExportFormat = "markdown" | "text";
+
 
