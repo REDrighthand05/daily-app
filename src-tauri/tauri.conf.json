@@ -37,6 +37,13 @@
       "iconAsTemplate": true
     }
   },
+  "plugins": {
+    "updater": {
+      "pubkey": "",
+      "endpoints": [],
+      "windows": { "installMode": "passive" }
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",

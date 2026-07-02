@@ -47,6 +47,7 @@ pub fn run() {
                 .build(),
         )
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .manage(settings_store)
         .manage(NotesStore::new())
         .manage(TagsStore::new())
