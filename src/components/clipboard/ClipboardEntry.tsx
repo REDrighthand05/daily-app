@@ -14,7 +14,7 @@ export default function ClipboardEntryComponent({ entry, onDelete, onStar, onCli
   const preview = entry.content.slice(0, 80);
 
   const handleCopy = async () => {
-    try { await writeClipboard(entry.content); } catch {}
+    try { await writeClipboard(entry.content); } catch (e) { console.error("Clipboard copy failed:", e); }
   };
 
   const time = new Date(entry.created_at).toLocaleTimeString();

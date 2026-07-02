@@ -12,7 +12,7 @@ interface Props {
 
 export default function ClipboardDetail({ entry, onBack, onDelete, onStar }: Props) {
   const handleCopy = async () => {
-    try { await writeClipboard(entry.content); } catch {}
+    try { await writeClipboard(entry.content); } catch (e) { console.error("Clipboard copy failed:", e); }
   };
 
   return (

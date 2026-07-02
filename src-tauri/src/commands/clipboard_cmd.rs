@@ -2,12 +2,16 @@ use tauri::State;
 use crate::db::clipboard::{ClipboardEntry, ClipboardStore};
 use sha2::{Sha256, Digest};
 use std::time::{SystemTime, UNIX_EPOCH};
+use std::sync::atomic::{AtomicU64, Ordering};
+
+static CLIP_ID_COUNTER: AtomicU64 = AtomicU64::new(0);
 
 fn generate_id() -> String {
     let us = SystemTime::now()
         .duration_since(UNIX_EPOCH).unwrap_or_default()
         .as_micros();
-    format!("clip{:x}", us)
+    let c = CLIP_ID_COUNTER.fetch_add(1, Ordering::Relaxed);
+    format!("clip{:x}_{:x}", us, c)
 }
 
 #[tauri::command]

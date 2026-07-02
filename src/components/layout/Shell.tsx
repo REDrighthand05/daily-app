@@ -11,7 +11,7 @@ import { listen } from "@tauri-apps/api/event";
 import { FileText, Clipboard, Settings } from "lucide-react";
 
 export default function Shell() {
-  const { activeTab, loadAll, setActiveTab, openGlobalSearch } = useAppStore();
+  const { activeTab, loadAll, setActiveTab } = useAppStore();
 
   useEffect(() => {
     loadAll();
@@ -27,9 +27,11 @@ export default function Shell() {
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA") return;
+      const state = useAppStore.getState();
+      if (state.globalSearchOpen) return;
       if (e.key === "/" || ((e.ctrlKey || e.metaKey) && e.key === "f")) {
         e.preventDefault();
-        openGlobalSearch();
+        state.openGlobalSearch();
       }
     };
     window.addEventListener("keydown", handler);
