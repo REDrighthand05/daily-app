@@ -21,7 +21,9 @@
     "@tauri-apps/plugin-dialog": "^2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "zustand": "^5.0.14"
+    "zustand": "^5.0.14",
+    "i18next": "^24.2.0",
+    "react-i18next": "^15.4.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",

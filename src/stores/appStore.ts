@@ -66,6 +66,7 @@ const defaults: AppSettings = {
   archive_days: 30,
   accent_color: "#4F8CFF",
   animations_enabled: true,
+  language: "en-US",
 };
 
 export const useAppStore = create<AppState>((set, get) => ({

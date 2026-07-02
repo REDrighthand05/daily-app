@@ -9,6 +9,7 @@ export interface AppSettings {
   archive_days: number;
   accent_color: string;
   animations_enabled: boolean;
+  language: string;
 }
 
 export interface Note {

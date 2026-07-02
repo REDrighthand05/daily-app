@@ -29,6 +29,8 @@ pub struct AppSettings {
     pub accent_color: String,
     #[serde(default = "default_animations_enabled")]
     pub animations_enabled: bool,
+    #[serde(default = "default_language")]
+    pub language: String,
 }
 
 fn default_theme() -> String { "system".into() }
@@ -43,6 +45,7 @@ fn default_clipboard_enabled() -> bool { true }
 fn default_clipboard_max() -> u32 { 500 }
 fn default_accent_color() -> String { "#4F8CFF".into() }
 fn default_animations_enabled() -> bool { true }
+fn default_language() -> String { "en-US".into() }
 
 impl Default for AppSettings {
     fn default() -> Self {
@@ -59,6 +62,7 @@ impl Default for AppSettings {
             clipboard_max_entries: default_clipboard_max(),
             accent_color: default_accent_color(),
             animations_enabled: default_animations_enabled(),
+            language: default_language(),
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿import { useAppStore } from "../../stores/appStore";
+import { useAppStore } from "../../stores/appStore";
 import type { AppSettings } from "../../types";
 import { Sun, Moon, Monitor, Palette, AlignLeft, AlignRight } from "lucide-react";
 import ThemePicker from "../theme/ThemePicker";
+import LanguagePicker from "./LanguagePicker";
 import CollapsibleSection from "../layout/CollapsibleSection";
 
 export default function SettingsPage() {
@@ -52,6 +53,8 @@ export default function SettingsPage() {
           />
           <span>Enable animations</span>
         </label>
+        <h3>Language</h3>
+        <LanguagePicker />
       </CollapsibleSection>
 
       <CollapsibleSection title="Panel">

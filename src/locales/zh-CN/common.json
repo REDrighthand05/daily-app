@@ -1,0 +1,120 @@
+{
+  "appName": "Daily",
+
+  "common": {
+    "ok": "确定",
+    "cancel": "取消",
+    "confirm": "确认",
+    "done": "完成",
+    "back": "返回",
+    "save": "保存",
+    "delete": "删除",
+    "search": "搜索",
+    "close": "关闭",
+    "loading": "加载中..."
+  },
+
+  "tabs": {
+    "notes": "笔记",
+    "clipboard": "剪贴板",
+    "settings": "设置"
+  },
+
+  "notes": {
+    "title": "笔记",
+    "empty": "空白笔记",
+    "newNote": "新建笔记",
+    "startTyping": "开始输入...",
+    "selectNote": "请选择或创建一条笔记",
+    "search": "搜索笔记...",
+    "trash": "回收站",
+    "archived": "已归档",
+    "active": "活跃",
+    "count": "{count} 条笔记",
+    "archivedCount": "{count} 条归档",
+    "trashEmpty": "回收站为空",
+    "purgeAll": "清空回收站",
+    "moveToTrash": "移入回收站",
+    "restore": "恢复",
+    "deletePermanent": "永久删除",
+    "archive": "归档",
+    "unarchive": "取消归档",
+    "pin": "置顶",
+    "unpin": "取消置顶"
+  },
+
+  "clipboard": {
+    "title": "剪贴板",
+    "search": "搜索剪贴板...",
+    "empty": "剪贴板为空",
+    "entries": "{count} 条记录",
+    "clear": "清空",
+    "clearConfirm": "确定要清空剪贴板历史？",
+    "copy": "复制",
+    "copied": "已复制！",
+    "star": "收藏",
+    "unstar": "取消收藏",
+    "detail": "剪贴板详情"
+  },
+
+  "search": {
+    "placeholder": "搜索笔记和剪贴板...",
+    "noResults": "未找到结果",
+    "notes": "笔记 ({count})",
+    "clipboard": "剪贴板 ({count})"
+  },
+
+  "settings": {
+    "title": "设置",
+    "appearance": "外观",
+    "theme": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统",
+    "accentColor": "强调色",
+    "animations": "启用动画",
+    "panel": "面板",
+    "position": "面板位置",
+    "left": "左侧",
+    "right": "右侧",
+    "float": "浮动",
+    "opacity": "透明度",
+    "autostart": "开机自启",
+    "startWithWindows": "跟随 Windows 启动",
+    "shortcut": "快捷键",
+    "language": "语言"
+  },
+
+  "tags": {
+    "addTags": "+ 标签",
+    "newTag": "标签名..."
+  },
+
+  "export": {
+    "export": "导出",
+    "exportMd": "导出为 Markdown",
+    "exportTxt": "导出为文本"
+  },
+
+  "editor": {
+    "bold": "加粗",
+    "italic": "斜体",
+    "heading": "标题",
+    "list": "列表",
+    "code": "代码块",
+    "edit": "编辑",
+    "preview": "预览"
+  },
+
+  "tray": {
+    "show": "显示",
+    "settings": "设置",
+    "quit": "退出"
+  },
+
+  "errors": {
+    "clipboardWrite": "剪贴板写入失败",
+    "searchFailed": "搜索失败",
+    "loadFailed": "数据加载失败"
+  }
+}

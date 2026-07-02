@@ -1,0 +1,120 @@
+{
+  "appName": "Daily",
+
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "done": "Done",
+    "back": "Back",
+    "save": "Save",
+    "delete": "Delete",
+    "search": "Search",
+    "close": "Close",
+    "loading": "Loading..."
+  },
+
+  "tabs": {
+    "notes": "Notes",
+    "clipboard": "Clipboard",
+    "settings": "Settings"
+  },
+
+  "notes": {
+    "title": "Notes",
+    "empty": "Empty note",
+    "newNote": "New note",
+    "startTyping": "Start typing...",
+    "selectNote": "Select a note or create a new one",
+    "search": "Search notes...",
+    "trash": "Trash",
+    "archived": "Archived",
+    "active": "Active",
+    "count": "{count} notes",
+    "archivedCount": "{count} archived",
+    "trashEmpty": "Trash is empty",
+    "purgeAll": "Purge all",
+    "moveToTrash": "Move to trash",
+    "restore": "Restore",
+    "deletePermanent": "Delete permanently",
+    "archive": "Archive",
+    "unarchive": "Unarchive",
+    "pin": "Pin",
+    "unpin": "Unpin"
+  },
+
+  "clipboard": {
+    "title": "Clipboard",
+    "search": "Search clipboard...",
+    "empty": "Clipboard is empty",
+    "entries": "{count} entries",
+    "clear": "Clear",
+    "clearConfirm": "Clear clipboard history?",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "star": "Star",
+    "unstar": "Unstar",
+    "detail": "Clipboard Detail"
+  },
+
+  "search": {
+    "placeholder": "Search notes and clipboard...",
+    "noResults": "No results found",
+    "notes": "Notes ({count})",
+    "clipboard": "Clipboard ({count})"
+  },
+
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "accentColor": "Accent Color",
+    "animations": "Enable animations",
+    "panel": "Panel",
+    "position": "Panel Position",
+    "left": "Left",
+    "right": "Right",
+    "float": "Float",
+    "opacity": "Opacity",
+    "autostart": "Autostart",
+    "startWithWindows": "Start with Windows",
+    "shortcut": "Shortcut",
+    "language": "Language"
+  },
+
+  "tags": {
+    "addTags": "+ Tags",
+    "newTag": "Tag name..."
+  },
+
+  "export": {
+    "export": "Export",
+    "exportMd": "Export as Markdown",
+    "exportTxt": "Export as Text"
+  },
+
+  "editor": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "heading": "Heading",
+    "list": "List",
+    "code": "Code block",
+    "edit": "Edit",
+    "preview": "Preview"
+  },
+
+  "tray": {
+    "show": "Show",
+    "settings": "Settings",
+    "quit": "Quit"
+  },
+
+  "errors": {
+    "clipboardWrite": "Clipboard copy failed",
+    "searchFailed": "Search failed",
+    "loadFailed": "Failed to load data"
+  }
+}
