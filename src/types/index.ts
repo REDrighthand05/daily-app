@@ -7,6 +7,8 @@ export interface AppSettings {
   window_width: number;
   window_height: number;
   archive_days: number;
+  accent_color: string;
+  animations_enabled: boolean;
 }
 
 export interface Note {

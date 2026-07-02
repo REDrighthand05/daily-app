@@ -1,6 +1,8 @@
 ﻿import { useAppStore } from "../../stores/appStore";
 import type { AppSettings } from "../../types";
 import { Sun, Moon, Monitor, Palette, AlignLeft, AlignRight } from "lucide-react";
+import ThemePicker from "../theme/ThemePicker";
+import CollapsibleSection from "../layout/CollapsibleSection";
 
 export default function SettingsPage() {
   const { settings, updateSettings } = useAppStore();
@@ -21,7 +23,7 @@ export default function SettingsPage() {
     <div className="settings-page">
       <h2>Settings</h2>
 
-      <section>
+      <CollapsibleSection title="Appearance">
         <h3>Theme</h3>
         <div className="settings-options">
           {themes.map((t) => (
@@ -35,9 +37,24 @@ export default function SettingsPage() {
             </button>
           ))}
         </div>
-      </section>
 
-      <section>
+        <h3>Accent Color</h3>
+        <ThemePicker
+          accentColor={settings.accent_color}
+          onChange={(color) => updateSettings({ accent_color: color })}
+        />
+
+        <label className="settings-toggle">
+          <input
+            type="checkbox"
+            checked={settings.animations_enabled}
+            onChange={(e) => updateSettings({ animations_enabled: e.target.checked })}
+          />
+          <span>Enable animations</span>
+        </label>
+      </CollapsibleSection>
+
+      <CollapsibleSection title="Panel">
         <h3>Panel Position</h3>
         <div className="settings-options">
           {positions.map((p) => (
@@ -51,9 +68,6 @@ export default function SettingsPage() {
             </button>
           ))}
         </div>
-      </section>
-
-      <section>
         <h3>Opacity</h3>
         <div className="settings-slider">
           <input
@@ -67,7 +81,7 @@ export default function SettingsPage() {
           />
           <span>{Math.round(settings.opacity * 100)}%</span>
         </div>
-      </section>
+      </CollapsibleSection>
 
       <section>
         <h3>Autostart</h3>

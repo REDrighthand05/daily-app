@@ -301,7 +301,7 @@
   cursor: default;
 }
 
-/* 闁冲厜鍋撻柍鍏夊亾 Tag Components 闁冲厜鍋撻柍鍏夊亾 */
+/* 闂佸啿鍘滈崑鎾绘煃閸忓浜?Tag Components 闂佸啿鍘滈崑鎾绘煃閸忓浜?*/
 
 .tag-chip {
   display: inline-flex;
@@ -408,7 +408,7 @@
 }
 .cat-filter-item:hover:not(.active) { background: var(--hover-bg); }
 .cat-filter-clear { vertical-align: middle; }
-/* 闁冲厜鍋撻柍鍏夊亾 Editor Toolbar 闁冲厜鍋撻柍鍏夊亾 */
+/* 闂佸啿鍘滈崑鎾绘煃閸忓浜?Editor Toolbar 闂佸啿鍘滈崑鎾绘煃閸忓浜?*/
 
 .editor-toolbar {
   display: flex;
@@ -475,7 +475,7 @@
   border-right: 1px solid var(--border);
 }
 
-/* 闁冲厜鍋撻柍鍏夊亾 Markdown Preview 闁冲厜鍋撻柍鍏夊亾 */
+/* 闂佸啿鍘滈崑鎾绘煃閸忓浜?Markdown Preview 闂佸啿鍘滈崑鎾绘煃閸忓浜?*/
 
 .markdown-preview {
   flex: 1;
@@ -529,7 +529,7 @@
 .markdown-preview img { max-width: 100%; border-radius: 4px; }
 .markdown-preview a { color: var(--accent); }
 
-/* 閳光偓閳光偓 Archive Toggle 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Archive Toggle 闁冲厜鍋撻柍鍏夊亾 */
 
 .archive-toggle {
   display: flex;
@@ -556,7 +556,7 @@
   border-bottom-color: var(--accent);
 }
 
-/* 閳光偓閳光偓 Trash Bin 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Trash Bin 闁冲厜鍋撻柍鍏夊亾 */
 
 .trash-empty {
   padding: 20px;
@@ -607,7 +607,7 @@
 }
 .trash-item-actions button:hover { background: var(--hover-bg); color: var(--text); }
 
-/* 閳光偓閳光偓 Note Item Actions 閳光偓閳光偓 */
+/* 闁冲厜鍋撻柍鍏夊亾 Note Item Actions 闁冲厜鍋撻柍鍏夊亾 */
 
 .note-item-actions {
   display: flex;
@@ -624,7 +624,7 @@
 }
 .note-item-action-btn:hover { background: var(--hover-bg); color: var(--text); }
 .note-item.archived { opacity: 0.6; }
-/* 鈹€鈹€ Tab Bar 鈹€鈹€ */
+/* 閳光偓閳光偓 Tab Bar 閳光偓閳光偓 */
 
 .tab-bar {
   display: flex;
@@ -666,7 +666,7 @@
   overflow: hidden;
 }
 
-/* 鈹€鈹€ Clipboard Panel 鈹€鈹€ */
+/* 閳光偓閳光偓 Clipboard Panel 閳光偓閳光偓 */
 
 .clipboard-panel {
   display: flex;
@@ -696,7 +696,7 @@
   overflow-y: auto;
 }
 
-/* 鈹€鈹€ Clipboard Search 鈹€鈹€ */
+/* 閳光偓閳光偓 Clipboard Search 閳光偓閳光偓 */
 
 .cb-search {
   display: flex;
@@ -718,7 +718,7 @@
   padding: 2px; display: flex;
 }
 
-/* 鈹€鈹€ Clipboard Entry 鈹€鈹€ */
+/* 閳光偓閳光偓 Clipboard Entry 閳光偓閳光偓 */
 
 .cb-entry {
   padding: 6px 8px;
@@ -754,7 +754,7 @@
   margin-top: 2px;
 }
 
-/* 鈹€鈹€ Clipboard Action Buttons 鈹€鈹€ */
+/* 閳光偓閳光偓 Clipboard Action Buttons 閳光偓閳光偓 */
 
 .cb-action-btn {
   background: none; border: none;
@@ -765,7 +765,7 @@
 .cb-action-btn:hover { background: var(--hover-bg); color: var(--text); }
 .cb-action-btn.starred { color: #f1c40f; }
 
-/* 鈹€鈹€ Clipboard Detail 鈹€鈹€ */
+/* 閳光偓閳光偓 Clipboard Detail 閳光偓閳光偓 */
 
 .cb-detail {
   display: flex;
@@ -805,7 +805,7 @@
   color: var(--text-secondary);
   border-top: 1px solid var(--border);
 }
-/* ── Search Overlay ── */
+/* 鈹€鈹€ Search Overlay 鈹€鈹€ */
 
 .search-overlay {
   position: fixed;
@@ -907,3 +907,38 @@
   display: flex; line-height: 1;
 }
 .note-item-move-btn:hover { color: var(--text); }
+
+/* ── Collapsible Section ── */
+
+.collapsible-section { border-bottom: 1px solid var(--border); }
+.collapsible-header {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; background: none; border: none;
+  padding: 10px; font-size: 12px; font-weight: 600;
+  cursor: pointer; color: var(--text); text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.collapsible-header:hover { background: var(--bg-hover); }
+.collapsible-chevron { transition: transform 0.2s; color: var(--text-muted); }
+.collapsible-chevron.open { transform: rotate(180deg); }
+.collapsible-content { padding: 0 10px 10px; }
+
+/* ── Theme Picker ── */
+
+.theme-picker { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.theme-picker-presets { display: flex; gap: 4px; }
+.theme-swatch {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.theme-swatch:hover { transform: scale(1.15); }
+.theme-swatch.active { border-color: var(--text); }
+.theme-picker-custom {
+  display: flex; align-items: center; gap: 4px;
+  cursor: pointer; color: var(--text-muted); font-size: 11px;
+}
+.theme-picker-custom input[type="color"] {
+  width: 24px; height: 24px; border: none;
+  background: none; cursor: pointer; padding: 0;
+}

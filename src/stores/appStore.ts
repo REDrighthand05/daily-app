@@ -64,6 +64,8 @@ const defaults: AppSettings = {
   window_width: 360,
   window_height: 720,
   archive_days: 30,
+  accent_color: "#4F8CFF",
+  animations_enabled: true,
 };
 
 export const useAppStore = create<AppState>((set, get) => ({

@@ -25,6 +25,10 @@ pub struct AppSettings {
     pub clipboard_enabled: bool,
     #[serde(default = "default_clipboard_max")]
     pub clipboard_max_entries: u32,
+    #[serde(default = "default_accent_color")]
+    pub accent_color: String,
+    #[serde(default = "default_animations_enabled")]
+    pub animations_enabled: bool,
 }
 
 fn default_theme() -> String { "system".into() }
@@ -37,6 +41,8 @@ fn default_height() -> u32 { 720 }
 fn default_archive_days() -> u32 { 30 }
 fn default_clipboard_enabled() -> bool { true }
 fn default_clipboard_max() -> u32 { 500 }
+fn default_accent_color() -> String { "#4F8CFF".into() }
+fn default_animations_enabled() -> bool { true }
 
 impl Default for AppSettings {
     fn default() -> Self {
@@ -51,6 +57,8 @@ impl Default for AppSettings {
             archive_days: default_archive_days(),
             clipboard_enabled: default_clipboard_enabled(),
             clipboard_max_entries: default_clipboard_max(),
+            accent_color: default_accent_color(),
+            animations_enabled: default_animations_enabled(),
         }
     }
 }
