@@ -39,6 +39,12 @@ export const clearClipboardHistory = (): Promise<void> => invoke("clear_clipboar
 export const starClipboardEntry = (id: string, starred: boolean): Promise<void> =>
   invoke("star_clipboard_entry", { id, starred });
 
+// Reorder
+export const moveNote = (id: string, direction: string): Promise<void> =>
+  invoke("move_note", { id, direction });
+export const moveClipboardEntry = (id: string, direction: string): Promise<void> =>
+  invoke("move_clipboard_entry", { id, direction });
+
 // Search
 export const globalSearch = (query: string): Promise<SearchResultItem[]> =>
   invoke("global_search", { query });

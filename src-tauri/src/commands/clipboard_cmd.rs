@@ -88,3 +88,15 @@ pub fn write_clipboard(content: String) -> Result<(), String> {
     let mut clipboard = arboard::Clipboard::new().map_err(|e| format!("clipboard error: {}", e))?;
     clipboard.set_text(content).map_err(|e| format!("write error: {}", e))
 }
+#[tauri::command]
+pub fn move_clipboard_entry(store: State<ClipboardStore>, id: String, direction: String) -> Result<(), String> {
+    let mut entries = store.entries.lock().map_err(|e| e.to_string())?;
+    let idx = entries.iter().position(|e| e.id == id).ok_or("entry not found")?;
+    match direction.as_str() {
+        "up" if idx > 0 => entries.swap(idx, idx - 1),
+        "down" if idx < entries.len() - 1 => entries.swap(idx, idx + 1),
+        _ => {}
+    }
+    drop(entries);
+    store.save()
+}

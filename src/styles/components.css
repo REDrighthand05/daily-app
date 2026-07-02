@@ -889,3 +889,21 @@
   color: var(--text-secondary);
   font-size: 13px;
 }
+/* -- Note Item Move -- */
+.note-item-move {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  opacity: 0;
+  transition: opacity 0.1s;
+  padding: 0 2px;
+}
+.note-item:hover .note-item-move { opacity: 1; }
+.note-item-move-btn {
+  background: none; border: none;
+  padding: 1px 2px;
+  cursor: pointer; color: var(--text-secondary);
+  display: flex; line-height: 1;
+}
+.note-item-move-btn:hover { color: var(--text); }

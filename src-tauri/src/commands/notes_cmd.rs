@@ -81,3 +81,15 @@ pub fn purge_trash(store: State<NotesStore>) -> Result<(), String> {
     drop(notes);
     store.save()
 }
+#[tauri::command]
+pub fn move_note(store: State<NotesStore>, id: String, direction: String) -> Result<(), String> {
+    let mut notes = store.notes.lock().map_err(|e| e.to_string())?;
+    let idx = notes.iter().position(|n| n.id == id).ok_or("note not found")?;
+    match direction.as_str() {
+        "up" if idx > 0 => notes.swap(idx, idx - 1),
+        "down" if idx < notes.len() - 1 => notes.swap(idx, idx + 1),
+        _ => {}
+    }
+    drop(notes);
+    store.save()
+}

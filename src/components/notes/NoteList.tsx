@@ -1,6 +1,6 @@
 import { useAppStore } from "../../stores/appStore";
 import type { Note } from "../../types";
-import { Plus, Pin, Trash2, Archive, RotateCcw } from "lucide-react";
+import { Plus, Pin, Trash2, Archive, RotateCcw, ChevronUp, ChevronDown } from "lucide-react";
 import CategoryFilter from "../tags/CategoryFilter";
 import ArchiveToggle from "./ArchiveToggle";
 import TrashBin from "./TrashBin";
@@ -11,6 +11,7 @@ function generateId(): string {
 
 export default function NoteList() {
   const {
+    moveNote,
     notes, searchQuery, selectedTagId,
     showArchived, showDeleted,
     saveNote, deleteNote, archiveNote, restoreArchive, softDeleteNote, restoreNote
@@ -85,6 +86,7 @@ export default function NoteList() {
             showArchived={showArchived}
             onSave={saveNote}
             onDelete={softDeleteNote}
+            onMove={moveNote}
             onArchive={showArchived ? restoreArchive : archiveNote}
             onRestore={restoreNote}
             onHardDelete={deleteNote}
@@ -96,7 +98,7 @@ export default function NoteList() {
 }
 
 function NoteListItem({
-  note, showArchived, onSave, onDelete, onArchive, onRestore, onHardDelete,
+  note, showArchived, onSave, onDelete, onMove, onArchive, onRestore, onHardDelete,
 }: {
   note: Note;
   showArchived: boolean;
@@ -105,6 +107,7 @@ function NoteListItem({
   onArchive: (id: string) => Promise<void>;
   onRestore: (id: string) => Promise<void>;
   onHardDelete: (id: string) => Promise<void>;
+  onMove: (id: string, dir: string) => Promise<void>;
 }) {
   const togglePin = () => onSave({ ...note, pinned: !note.pinned });
   const line = note.content.split("\n")[0] || "";
@@ -112,6 +115,10 @@ function NoteListItem({
 
   return (
     <div className={`note-item ${note.pinned ? "pinned" : ""} ${note.archived ? "archived" : ""}`}>
+      <div className="note-item-move">
+        <button className="note-item-move-btn" onClick={() => onMove(note.id, "up")} title="Move up"><ChevronUp size={10} /></button>
+        <button className="note-item-move-btn" onClick={() => onMove(note.id, "down")} title="Move down"><ChevronDown size={10} /></button>
+      </div>
       <button className="note-item-main" onClick={togglePin}>
         <Pin size={12} className={`pin-icon ${note.pinned ? "pinned" : ""}`} />
         <span className="note-item-preview">{text}</span>

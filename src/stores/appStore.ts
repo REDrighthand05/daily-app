@@ -51,6 +51,8 @@ interface AppState {
   closeGlobalSearch: () => void;
   setGlobalSearchQuery: (q: string) => void;
   setGlobalSearchResults: (results: SearchResultItem[]) => void;
+  moveNote: (id: string, direction: string) => Promise<void>;
+  moveClipboardEntry: (id: string, direction: string) => Promise<void>;
 }
 
 const defaults: AppSettings = {
@@ -211,4 +213,22 @@ export const useAppStore = create<AppState>((set, get) => ({
   closeGlobalSearch: () => set({ globalSearchOpen: false, globalSearchQuery: "", globalSearchResults: [] }),
   setGlobalSearchQuery: (q) => set({ globalSearchQuery: q }),
   setGlobalSearchResults: (results) => set({ globalSearchResults: results }),
+
+  moveNote: async (id, direction) => {
+    await ipc.moveNote(id, direction);
+    const notes = [...get().notes];
+    const idx = notes.findIndex((n) => n.id === id);
+    const target = direction === "up" && idx > 0 ? idx - 1
+      : direction === "down" && idx < notes.length - 1 ? idx + 1 : -1;
+    if (target >= 0) { [notes[idx], notes[target]] = [notes[target], notes[idx]]; set({ notes }); }
+  },
+
+  moveClipboardEntry: async (id, direction) => {
+    await ipc.moveClipboardEntry(id, direction);
+    const entries = [...get().clipboardEntries];
+    const idx = entries.findIndex((e) => e.id === id);
+    const target = direction === "up" && idx > 0 ? idx - 1
+      : direction === "down" && idx < entries.length - 1 ? idx + 1 : -1;
+    if (target >= 0) { [entries[idx], entries[target]] = [entries[target], entries[idx]]; set({ clipboardEntries: entries }); }
+  },
 }));
